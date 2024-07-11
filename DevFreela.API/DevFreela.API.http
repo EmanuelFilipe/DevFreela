@@ -1,4 +1,4 @@
-@DevFreela.API_HostAddress = http://localhost:5188
+@DevFreela.API_HostAddress = http://localhost:5274
 
 GET {{DevFreela.API_HostAddress}}/weatherforecast/
 Accept: application/json
