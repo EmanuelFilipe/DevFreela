@@ -1,4 +1,5 @@
 using DevFreela.API.Models;
+using DevFreela.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -18,7 +19,7 @@ public class ProjectsController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-
+        var project = new Project("devfreela", "teste", 1, 1, 10000);
         return Ok();
     }
 
