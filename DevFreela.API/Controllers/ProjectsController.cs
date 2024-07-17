@@ -1,4 +1,6 @@
 using DevFreela.API.Models;
+using DevFreela.Application.InputModels;
+using DevFreela.Application.Services.Interfaces;
 using DevFreela.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -10,61 +12,73 @@ namespace DevFreela.API.Controllers;
 public class ProjectsController : ControllerBase
 {
     private readonly OpeningTimeOption _option;
+    private readonly IProjectService _projectService;
+    //public ProjectsController(IOptions<OpeningTimeOption> option)
+    //{
+    //    _option = option.Value;
+    //}
 
-    public ProjectsController(IOptions<OpeningTimeOption> option)
+    public ProjectsController(IProjectService projectService)
     {
-        _option = option.Value;
+        _projectService = projectService;
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult Get([FromBody] string query)
     {
-        var project = new Project("devfreela", "teste", 1, 1, 10000);
-        return Ok();
+        var projects = _projectService.GetAll(query);
+        if (projects is null) return NotFound();
+        return Ok(projects);
     }
 
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {
-        return Ok(id);
+        var project = _projectService.GetById(id);
+        if (project is null) return NotFound();
+
+        return Ok(project);
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] CreateProjectModel model)
+    public IActionResult Post([FromBody] CreateProjectInputModel inputModel)
     {
-        return Ok();
-        //return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
+        int id = _projectService.Create(inputModel);
+        return CreatedAtAction(nameof(GetById), new { id }, inputModel);
     }
 
     [HttpPut("{id:int}")]
-    public IActionResult Put(int id, [FromBody] UpdateProjectModel model)
+    public IActionResult Put(int id, [FromBody] UpdateProjectInputModel inputModel)
     {
-        return Ok();
-        //return NoContent();
+        _projectService.Update(inputModel);
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        return Ok();
-        //return NoContent();
+        _projectService.Delete(id);
+        return NoContent();
     }
 
     [HttpPost("{id:int}/comments")]
-    public IActionResult PostComment(int id, [FromBody] CreateCommentModel model)
+    public IActionResult PostComment(int id, [FromBody] CreateCommentProjectInputModel inputModel)
     {
+        _projectService.CreateComment(inputModel);
         return NoContent();
     }
 
     [HttpPut("{id:int}/start")]
     public IActionResult Start(int id)
     {
+        _projectService.Start(id);
         return NoContent();
     }
 
     [HttpPut("{id:int}/finish")]
     public IActionResult Finish(int id)
     {
+        _projectService.Finish(id);
         return NoContent();
     }
 
