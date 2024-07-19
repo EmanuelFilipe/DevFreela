@@ -27,13 +27,13 @@ namespace DevFreela.Application.Services.Implementations
 
         public void Delete(int id)
         {
-            var project = _dbContext.Projects.Find(p => p.Id == id);
+            var project = _dbContext.Projects.Find(id);
             project.Cancel();
         }
 
         public void Finish(int id)
         {
-            var project = _dbContext.Projects.Find(p => p.Id == id);
+            var project = _dbContext.Projects.Find(id);
             project.Finish();
         }
 
@@ -49,7 +49,7 @@ namespace DevFreela.Application.Services.Implementations
 
         public ProjectDetailsViewModel GetById(int id)
         {
-            var project = _dbContext.Projects.Find(p => p.Id == id);
+            var project = _dbContext.Projects.Find(id);
 
             if (project is null) return null;
 
@@ -66,13 +66,13 @@ namespace DevFreela.Application.Services.Implementations
 
         public void Start(int id)
         {
-            var project = _dbContext.Projects.Find(p => p.Id == id);
+            var project = _dbContext.Projects.Find(id);
             project.Start();
         }
 
         public void Update(UpdateProjectInputModel inputModel)
         {
-            var project = _dbContext.Projects.Find(p => p.Id == inputModel.Id);
+            var project = _dbContext.Projects.Find(inputModel.Id);
             project.Update(project.Title, project.Description, project.TotalCost);
 
         }
