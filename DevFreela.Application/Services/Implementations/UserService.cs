@@ -20,18 +20,16 @@ namespace DevFreela.Application.Services.Implementations
             var user = new User(inputModel.FullName, inputModel.Email, inputModel.BirthDate);
 
             _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
 
             return user.Id;
         }
 
         public UserViewModel GetUser(int id)
         {
-            var user = _dbContext.Users.SingleOrDefault(u => u.Id == id);
+            var user = _dbContext.Users.Find(id);
 
-            if (user == null)
-            {
-                return null;
-            }
+            if (user is null) return null;
 
             return new UserViewModel(user.FullName, user.Email);
         }
