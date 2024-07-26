@@ -20,39 +20,10 @@ namespace DevFreela.Application.Services.Implementations
             _connectionString = configuration.GetConnectionString("DevFreelaCs");
         }
 
-        public int Create(CreateProjectInputModel inputModel)
-        {
-            //_dbContext.Projects.Add();
-            _dbContext.SaveChanges();
-            return 0;
-        }
-
-        public void CreateComment(CreateCommentProjectInputModel inputModel)
-        {
-            //_dbContext.ProjectComments.Add();
-            _dbContext.SaveChanges();
-        }
-
-        public void Delete(int id)
-        {
-            var project = _dbContext.Projects.Find(id);
-            project.Cancel();
-        }
-
         public void Finish(int id)
         {
             var project = _dbContext.Projects.Find(id);
             project.Finish();
-        }
-
-        public List<ProjectViewModel> GetAll(string query)
-        {
-            var projects = _dbContext.Projects;
-
-            var projectsViewModel = projects.Select(p => new ProjectViewModel(p.Id, p.Title, p.CreatedAt))
-                .ToList();
-
-            return projectsViewModel;
         }
 
         public ProjectDetailsViewModel GetById(int id)
@@ -90,13 +61,6 @@ namespace DevFreela.Application.Services.Implementations
 
                 sqlConnection.Execute(script, new { status = project.Status, startedAt = project.StartedAt, id });
             }
-        }
-
-        public void Update(UpdateProjectInputModel inputModel)
-        {
-            var project = _dbContext.Projects.Find(inputModel.Id);
-            project.Update(project.Title, project.Description, project.TotalCost);
-
         }
     }
 }

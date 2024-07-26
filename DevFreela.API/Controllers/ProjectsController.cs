@@ -1,7 +1,13 @@
 using DevFreela.API.Models;
+using DevFreela.Application.Commands.CreateComment;
+using DevFreela.Application.Commands.CreateProject;
+using DevFreela.Application.Commands.DeleteProject;
+using DevFreela.Application.Commands.UpdateProject;
 using DevFreela.Application.InputModels;
+using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Application.Services.Interfaces;
 using DevFreela.Core.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -13,21 +19,26 @@ public class ProjectsController : ControllerBase
 {
     private readonly OpeningTimeOption _option;
     private readonly IProjectService _projectService;
+    private readonly IMediator _mediator;
     //public ProjectsController(IOptions<OpeningTimeOption> option)
     //{
     //    _option = option.Value;
     //}
 
-    public ProjectsController(IProjectService projectService)
+    public ProjectsController(IProjectService projectService, IMediator mediator)
     {
         _projectService = projectService;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public IActionResult Get([FromBody] string query)
+    public async Task<IActionResult> Get([FromBody] string query)
     {
-        var projects = _projectService.GetAll(query);
+        var getAllProjectsQuery = new GetAllProjectsQuery(query);
+        var projects = await _mediator.Send(getAllProjectsQuery);
+        
         if (projects is null) return NotFound();
+        
         return Ok(projects);
     }
 
@@ -41,30 +52,32 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] CreateProjectInputModel inputModel)
+    public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
     {
-        int id = _projectService.Create(inputModel);
-        return CreatedAtAction(nameof(GetById), new { id }, inputModel);
+        int id = await _mediator.Send(command);
+        return CreatedAtAction(nameof(GetById), new { id }, command);
     }
 
     [HttpPut("{id:int}")]
-    public IActionResult Put(int id, [FromBody] UpdateProjectInputModel inputModel)
+    public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
     {
-        _projectService.Update(inputModel);
+        await _mediator.Send(command);
         return NoContent();
     }
 
     [HttpDelete("{id:int}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        _projectService.Delete(id);
+        //quando o command so tem um id, e esse id vem como parâmetro, deve istanciar a classe command
+        var command = new DeleteProjectCommand(id);
+        await _mediator.Send(command);
         return NoContent();
     }
 
     [HttpPost("{id:int}/comments")]
-    public IActionResult PostComment(int id, [FromBody] CreateCommentProjectInputModel inputModel)
+    public async Task<IActionResult> PostComment(int id, [FromBody] CreateCommentCommand command)
     {
-        _projectService.CreateComment(inputModel);
+        await _mediator.Send(command);
         return NoContent();
     }
 
