@@ -16,6 +16,7 @@ namespace DevFreela.Application.Commands.CreateComment
         public async Task<Unit> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
         {
             var projectComment = new ProjectComment(request.Content, request.IdProject, request.IdUser);
+            
             await _dbContext.ProjectComments.AddAsync(projectComment);
             await _dbContext.SaveChangesAsync();
 
