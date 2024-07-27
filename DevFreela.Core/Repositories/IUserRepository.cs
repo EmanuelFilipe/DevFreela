@@ -1,9 +1,9 @@
-﻿using DevFreela.Core.DTOs;
+﻿using DevFreela.Core.Entities;
 
 namespace DevFreela.Core.Repositories
 {
     public interface IUserRepository
     {
-        Task<UserDTO> GetByIdAsync(int id);
+        Task<User> GetByIdAsync(int id);
     }
 }

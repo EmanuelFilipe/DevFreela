@@ -15,7 +15,17 @@ namespace DevFreela.Application.Queries.GetUser
 
         public async Task<UserDTO> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            return await _userRepository.GetByIdAsync(request.Id);
+            var user = await _userRepository.GetByIdAsync(request.Id);
+
+            if (user is null) return null;
+
+            UserDTO userDTO = new UserDTO
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+            };
+
+            return userDTO;
         }
     }
 }

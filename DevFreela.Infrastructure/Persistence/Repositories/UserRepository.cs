@@ -1,4 +1,4 @@
-﻿using DevFreela.Core.DTOs;
+﻿using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories
@@ -12,19 +12,9 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<UserDTO> GetByIdAsync(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
-            var user = await _dbContext.Users.FindAsync(id);
-
-            if (user is null) return null;
-
-            UserDTO userDTO = new UserDTO
-            {
-                FullName = user.FullName,
-                Email = user.Email,
-            };
-
-            return userDTO;
+            return await _dbContext.Users.FindAsync(id);
         }
     }
 }

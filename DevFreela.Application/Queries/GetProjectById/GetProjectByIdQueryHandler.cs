@@ -16,7 +16,22 @@ namespace DevFreela.Application.Queries.GetProjectById
         public async Task<ProjectDetailDTO> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
         {
             var project = await _projectRepository.GetByIdAsync(request.Id);
-            return project;
+
+            if (project is null) return null;
+
+            var projectDetailDTO = new ProjectDetailDTO
+            {
+                Id = project.Id,
+                Title = project.Title,
+                Description = project.Description,
+                TotalCost = project.TotalCost,
+                StartedAt = project.StartedAt,
+                FinishedAt = project.FinishedAt,
+                ClientFullName = project.Client.FullName,
+                FreelancerFullName = project.Freelancer.FullName
+            };
+
+            return projectDetailDTO;
         }
     }
 }
