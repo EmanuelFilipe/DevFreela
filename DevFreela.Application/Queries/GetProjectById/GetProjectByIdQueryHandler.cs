@@ -1,40 +1,22 @@
-﻿using DevFreela.Application.ViewModels;
-using DevFreela.Infrastructure.Persistence;
+﻿using DevFreela.Core.DTOs;
+using DevFreela.Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace DevFreela.Application.Queries.GetProjectById
 {
-    public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, ProjectDetailsViewModel>
+    public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, ProjectDetailDTO>
     {
-        private readonly DevFreelaDbContext _dbContext;
+        private readonly IProjectRepository _projectRepository;
 
-        public GetProjectByIdQueryHandler(DevFreelaDbContext dbContext)
+        public GetProjectByIdQueryHandler(IProjectRepository projectRepository)
         {
-            _dbContext = dbContext;
+            _projectRepository = projectRepository;
         }
 
-        public async Task<ProjectDetailsViewModel> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ProjectDetailDTO> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
         {
-            var project = await _dbContext.Projects
-                                          .Include(p => p.Client)
-                                          .Include(p => p.Freelancer)
-                                          .SingleOrDefaultAsync(p => p.Id == request.Id);
-
-            if (project is null) return null;
-
-            var projectDetailsViewModel = new ProjectDetailsViewModel(
-              project.Id,
-              project.Title,
-              project.Description,
-              project.TotalCost,
-              project.StartedAt,
-              project.FinishedAt,
-              project.Client.FullName,
-              project.Freelancer.FullName);
-
-            return projectDetailsViewModel;
+            var project = await _projectRepository.GetByIdAsync(request.Id);
+            return project;
         }
     }
 }

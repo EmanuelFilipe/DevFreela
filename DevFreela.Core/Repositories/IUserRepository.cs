@@ -2,8 +2,8 @@
 
 namespace DevFreela.Core.Repositories
 {
-    public interface ISkillRepository
+    public interface IUserRepository
     {
-        Task<List<SkillDTO>> GetAllAsync();
+        Task<UserDTO> GetByIdAsync(int id);
     }
 }
