@@ -1,24 +1,46 @@
-﻿using DevFreela.Core.Entities;
+﻿using DevFreela.Core.DTOs;
+using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories
 {
     public class ProjectRepository : IProjectRepository
     {
         private readonly DevFreelaDbContext _dbContext;
-        private readonly string _connectionString;
 
-        public ProjectRepository(DevFreelaDbContext dbContext, IConfiguration configuration)
+        public ProjectRepository(DevFreelaDbContext dbContext)
         {
             _dbContext = dbContext;
-            _connectionString = configuration.GetConnectionString("DevFreelaCs");
         }
 
-        public async Task<List<Project>> GetAll()
+        public async Task<List<Project>> GetAllAsync()
         {
             return await _dbContext.Projects.ToListAsync();
+        }
+
+        public async Task<ProjectDetailDTO> GetByIdAsync(int id)
+        {
+            var project = await _dbContext.Projects
+                                          .Include(p => p.Client)
+                                          .Include(p => p.Freelancer)
+                                          .SingleOrDefaultAsync(p => p.Id == id);
+
+            if (project is null) return null;
+
+            var projectDetailDTO = new ProjectDetailDTO
+            {
+                Id = project.Id,
+                Title = project.Title,
+                Description = project.Description,
+                TotalCost = project.TotalCost,
+                StartedAt = project.StartedAt,
+                FinishedAt = project.FinishedAt,
+                ClientFullName = project.Client.FullName,
+                FreelancerFullName = project.Freelancer.FullName
+            };
+
+            return projectDetailDTO;
         }
     }
 }
