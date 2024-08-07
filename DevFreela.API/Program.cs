@@ -1,8 +1,12 @@
+using DevFreela.API.Filters;
 using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateProject;
+using DevFreela.Application.Validators.Project;
 using DevFreela.Core.Repositories;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +23,18 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ISkillRepository, SkillRepository>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectCommandValidator>();
+
+//builder.Services.AddControllers(option => 
+//                    option.Filters.Add(typeof(ValidationFilter)))
+//                .AddFluentValidation(fv =>
+//                    fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
+//.AddFluentValidation(fv =>
+//    fv.RegisterValidatorsFromAssemblyContaining<CreateProjectCommandValidator>());
+
 builder.Services.AddMediatR(typeof(CreateProjectCommand));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
