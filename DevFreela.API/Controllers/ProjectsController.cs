@@ -8,12 +8,14 @@ using DevFreela.Application.Commands.UpdateProject;
 using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Application.Queries.GetProjectById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ProjectsController : ControllerBase
 {
     private readonly OpeningTimeOption _option;
@@ -29,6 +31,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "client, freelancer")]
     public async Task<IActionResult> Get([FromBody] string query)
     {
         var getAllProjectsQuery = new GetAllProjectsQuery(query);
@@ -51,6 +54,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
     {
         int id = await _mediator.Send(command);
@@ -58,6 +62,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
     {
         await _mediator.Send(command);
@@ -65,6 +70,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Delete(int id)
     {
         //quando o command so tem um id, e esse id vem como parâmetro, deve istanciar a classe command
@@ -74,6 +80,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost("{id:int}/comments")]
+    [Authorize(Roles = "client, freelancer")]
     public async Task<IActionResult> PostComment(int id, [FromBody] CreateCommentCommand command)
     {
         await _mediator.Send(command);
@@ -81,6 +88,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id:int}/start")]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Start(int id)
     {
         var command = new StartProjectCommand(id);
@@ -89,6 +97,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id:int}/finish")]
+    [Authorize(Roles = "client")]
     public async Task<IActionResult> Finish(int id)
     {
         var command = new FinishProjectCommand(id);
