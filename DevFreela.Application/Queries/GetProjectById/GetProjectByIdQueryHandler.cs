@@ -27,8 +27,8 @@ namespace DevFreela.Application.Queries.GetProjectById
                 TotalCost = project.TotalCost,
                 StartedAt = project.StartedAt,
                 FinishedAt = project.FinishedAt,
-                ClientFullName = project.Client.FullName,
-                FreelancerFullName = project.Freelancer.FullName
+                ClientFullName = project?.Client?.FullName,
+                FreelancerFullName = project?.Freelancer.FullName
             };
 
             return projectDetailDTO;
