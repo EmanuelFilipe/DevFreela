@@ -4,6 +4,7 @@ using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Application.Validators.Project;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
+using DevFreela.Infrastructure.Payments;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repositories;
 using DevFreela.Infrastructure.Services.Auth;
@@ -24,10 +25,14 @@ builder.Services.Configure<OpeningTimeOption>
 var connectionString = builder.Configuration.GetConnectionString("DevFreelaCs");
 builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServer(connectionString));
 
+// para comunicação com Microsserviço
+builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ISkillRepository, SkillRepository>()
-                .AddScoped<IAuthService, AuthService>();
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
 builder.Services.AddFluentValidationAutoValidation();

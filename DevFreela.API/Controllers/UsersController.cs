@@ -22,6 +22,7 @@ namespace DevFreela.API.Controllers
 
         // api/users/1
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var query = new GetUserQuery(id);
@@ -34,6 +35,7 @@ namespace DevFreela.API.Controllers
 
         // api/users
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreateUserCommand command)
         {
             int id = await _mediator.Send(command);
