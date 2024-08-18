@@ -6,9 +6,12 @@ using DevFreela.Infrastructure.Payments;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repositories;
 using DevFreela.Infrastructure.Services.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace DevFreela.Infrastructure
 {
@@ -19,7 +22,8 @@ namespace DevFreela.Infrastructure
         {
             services.AddData(configuration)
                     .AddRepositories()
-                    .AddServices();
+                    .AddServices()
+                    .AddAuth(configuration);
 
             return services;
         }
@@ -52,7 +56,8 @@ namespace DevFreela.Infrastructure
             return services;
         }
 
-        private static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddAuth(this IServiceCollection services, 
+                                                  IConfiguration configuration)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -63,10 +68,11 @@ namespace DevFreela.Infrastructure
                             ValidateAudience = true,
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
+
                             ValidIssuer = configuration["Jwt:Issuer"],
                             ValidAudience = configuration["Jwt:Audience"],
                             IssuerSigningKey = new SymmetricSecurityKey
-                                (Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                          (Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
                         };
                     });
 
