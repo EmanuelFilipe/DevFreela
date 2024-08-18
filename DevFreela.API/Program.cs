@@ -3,57 +3,30 @@ using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Application.Consumers;
 using DevFreela.Application.Validators.Project;
-using DevFreela.Core.Interfaces;
-using DevFreela.Core.Repositories;
-using DevFreela.Core.Services;
-using DevFreela.Infrastructure.MessageBus;
-using DevFreela.Infrastructure.Payments;
-using DevFreela.Infrastructure.Persistence;
-using DevFreela.Infrastructure.Persistence.Repositories;
-using DevFreela.Infrastructure.Services.Auth;
+using DevFreela.Infrastructure;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddInfrastructure(builder.Configuration);
+
 // Add services to the container.
 builder.Services.Configure<OpeningTimeOption>
     (builder.Configuration.GetSection("OpeningTime"));
-
-var connectionString = builder.Configuration.GetConnectionString("DevFreelaCs");
-builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServer(connectionString));
 
 // para comunicação com Microsserviço
 builder.Services.AddHttpClient();
 builder.Services.AddHostedService<PaymentApprovedConsumer>();
 
-// TODO: mover para arquivo
-// Mensageria com RabbitMQ - Parte 2, mostra como fica o arquivo
-// ou olhar no placerentallapp como foi feito
-builder.Services.AddScoped<IProjectRepository, ProjectRepository>()
-                .AddScoped<IUserRepository, UserRepository>()
-                .AddScoped<ISkillRepository, SkillRepository>()
-                .AddScoped<IAuthService, AuthService>()
-                .AddScoped<IPaymentService, PaymentService>()
-                .AddScoped<IMessageBusService, MessageBusService>();
-
 builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectCommandValidator>();
-
-//builder.Services.AddControllers(option => 
-//                    option.Filters.Add(typeof(ValidationFilter)))
-//                .AddFluentValidation(fv =>
-//                    fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
-//.AddFluentValidation(fv =>
-//    fv.RegisterValidatorsFromAssemblyContaining<CreateProjectCommandValidator>());
-
 builder.Services.AddMediatR(typeof(CreateProjectCommand));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -8,6 +8,7 @@
         public decimal TotalCost { get; set; }
         public DateTime? StartedAt { get; set; }
         public DateTime? FinishedAt { get; set; }
+        public string Status { get; set; }
         public string ClientFullName { get; set; }
         public string FreelancerFullName { get; set; }
     }

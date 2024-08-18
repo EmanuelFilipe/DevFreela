@@ -27,6 +27,7 @@ namespace DevFreela.Application.Queries.GetProjectById
                 TotalCost = project.TotalCost,
                 StartedAt = project.StartedAt,
                 FinishedAt = project.FinishedAt,
+                Status = project.Status.ToString(),
                 ClientFullName = project?.Client?.FullName,
                 FreelancerFullName = project?.Freelancer.FullName
             };
