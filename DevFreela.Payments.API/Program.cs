@@ -1,6 +1,7 @@
 using MediatR;
 using DevFreela.Payments.API.Commands;
 using DevFreela.Payments.API.Services;
+using DevFreela.Payments.API.Consumers;
 
 namespace DevFreela.Payments.API
 {
@@ -12,6 +13,8 @@ namespace DevFreela.Payments.API
 
             // Add services to the container.
             builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddHostedService<ProcessPaymentConsumer>();
+
             builder.Services.AddControllers();
             builder.Services.AddMediatR(typeof(PaymentCommand));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

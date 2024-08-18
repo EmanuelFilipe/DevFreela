@@ -106,7 +106,7 @@ public class ProjectsController : ControllerBase
 
         if (!result) return BadRequest("O pagamento não pode ser processado.");
 
-        return NoContent();
+        return Accepted();
     }
 
 }

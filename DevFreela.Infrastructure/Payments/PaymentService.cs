@@ -1,6 +1,6 @@
 ﻿using DevFreela.Core.DTOs;
+using DevFreela.Core.Interfaces;
 using DevFreela.Core.Services;
-using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Text.Json;
 
@@ -8,28 +8,48 @@ namespace DevFreela.Infrastructure.Payments
 {
     public class PaymentService : IPaymentService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly string _paymentBaseUrl;
+        private readonly IMessageBusService _messageBusService;
+        private const string QUEUE_NAME = "Payments";
 
-        public PaymentService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public PaymentService(IMessageBusService messageBusService)
         {
-            _httpClientFactory = httpClientFactory;
-            _paymentBaseUrl = configuration.GetSection("Services:Payments").Value;
+            _messageBusService = messageBusService;
         }
 
-        public async Task<bool> ProcessPayment(PaymentInfoDTO paymentInfoDTO)
+        public void ProcessPayment(PaymentInfoDTO paymentInfoDTO)
         {
-            var url = $"{_paymentBaseUrl}/api/payments";
             var paymentInfoJson = JsonSerializer.Serialize(paymentInfoDTO);
 
-            var paymentInfoContent = new StringContent(
-                paymentInfoJson, Encoding.UTF8, "application/json");
+            var paymentInfoBytes = Encoding.UTF8.GetBytes(paymentInfoJson);
 
-            var httpClient = _httpClientFactory.CreateClient("Payments");
-
-            var response = await httpClient.PostAsync(url, paymentInfoContent);
-
-            return response.IsSuccessStatusCode;
+            _messageBusService.Publish(QUEUE_NAME, paymentInfoBytes);
+           
         }
+
+        //modo antigo para comunicação com microsserviço
+        //private readonly IHttpClientFactory _httpClientFactory;
+        //private readonly string _paymentBaseUrl;
+
+        //public PaymentService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        //{
+        //    _httpClientFactory = httpClientFactory;
+        //    _paymentBaseUrl = configuration.GetSection("Services:Payments").Value;
+        //}
+
+        //[Obsolete(message: "codigo antigo para comunicação com microsserviço, será substituido por RabbitMQ")]
+        //public void ProcessPayment(PaymentInfoDTO paymentInfoDTO)
+        //{
+        //    var url = $"{_paymentBaseUrl}/api/payments";
+        //    var paymentInfoJson = JsonSerializer.Serialize(paymentInfoDTO);
+
+        //    var paymentInfoContent = new StringContent(
+        //        paymentInfoJson, Encoding.UTF8, "application/json");
+
+        //    var httpClient = _httpClientFactory.CreateClient("Payments");
+
+        //    var response = httpClient.PostAsync(url, paymentInfoContent);
+
+        //    //return response.IsSuccessStatusCode;
+        //}
     }
 }

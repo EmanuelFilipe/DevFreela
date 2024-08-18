@@ -1,9 +1,12 @@
 using DevFreela.API.Filters;
 using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateProject;
+using DevFreela.Application.Consumers;
 using DevFreela.Application.Validators.Project;
+using DevFreela.Core.Interfaces;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
+using DevFreela.Infrastructure.MessageBus;
 using DevFreela.Infrastructure.Payments;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repositories;
@@ -27,12 +30,17 @@ builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServe
 
 // para comunicação com Microsserviço
 builder.Services.AddHttpClient();
+builder.Services.AddHostedService<PaymentApprovedConsumer>();
 
+// TODO: mover para arquivo
+// Mensageria com RabbitMQ - Parte 2, mostra como fica o arquivo
+// ou olhar no placerentallapp como foi feito
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ISkillRepository, SkillRepository>()
                 .AddScoped<IAuthService, AuthService>()
-                .AddScoped<IPaymentService, PaymentService>();
+                .AddScoped<IPaymentService, PaymentService>()
+                .AddScoped<IMessageBusService, MessageBusService>();
 
 builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
 builder.Services.AddFluentValidationAutoValidation();
