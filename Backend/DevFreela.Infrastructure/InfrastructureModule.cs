@@ -25,6 +25,7 @@ namespace DevFreela.Infrastructure
                     .AddServices()
                     .AddAuth(configuration);
 
+            services.BuildServiceProvider().GetService<IDataService>().InitializeDB();
             return services;
         }
 
@@ -51,7 +52,8 @@ namespace DevFreela.Infrastructure
         {
             services.AddScoped<IAuthService, AuthService>()
                     .AddScoped<IPaymentService, PaymentService>()
-                    .AddScoped<IMessageBusService, MessageBusService>();
+                    .AddScoped<IMessageBusService, MessageBusService>()
+                    .AddTransient<IDataService, DataService>();
 
             return services;
         }
