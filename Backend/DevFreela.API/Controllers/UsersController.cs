@@ -1,6 +1,7 @@
 ﻿using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.LoginUser;
+using DevFreela.Application.Queries.GetAllUsers;
 using DevFreela.Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,18 @@ namespace DevFreela.API.Controllers
             if (user is null) return NotFound();
 
             return Ok(user);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAll()
+        {
+            var query = new GetAllUsersQuery();
+            var users = await _mediator.Send(query);
+
+            if (users is null) return NotFound();
+
+            return Ok(users);
         }
 
         // api/users
