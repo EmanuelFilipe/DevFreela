@@ -5,6 +5,8 @@
 npm install
 ```
 
+https://bootstrap-vue.org/docs/components/form
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve

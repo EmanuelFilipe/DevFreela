@@ -22,10 +22,12 @@ export default {
 
 <style lang="scss">
 #app {
-  display: flex;
+  /*display: flex;
   flex-direction: column;
   align-items: center;
-  color: #fff;
+  color: #fff;*/
+  margin: 50px;
+  padding: 0px;
 }
 
 </style>

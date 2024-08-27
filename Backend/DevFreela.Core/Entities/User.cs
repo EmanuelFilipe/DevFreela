@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace DevFreela.Core.Entities
 {
@@ -14,7 +13,6 @@ namespace DevFreela.Core.Entities
             Role = role;
             Active = true;
         }
-
         public string FullName { get; private set; }
         public string Email { get; private set; }
         public DateTime BirthDate { get; private set; }
@@ -29,12 +27,18 @@ namespace DevFreela.Core.Entities
         public List<Project> FreelanceProjects { get; private set; } = [];
         public List<ProjectComment> Comments { get; private set; }
 
-        public void Update(string fullName, string email, DateTime bithDate, bool active)
+        public void Update(int id, string fullName, string email, DateTime bithDate, bool active)
         {
+            Id = id;
             FullName = fullName;
             Email = email;
             BirthDate= bithDate;
             Active = active;
+        }
+
+        public void Delete()
+        {
+            Active = !Active;
         }
     }
 }

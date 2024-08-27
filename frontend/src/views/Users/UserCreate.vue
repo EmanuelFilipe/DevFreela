@@ -1,92 +1,135 @@
 <template>
-    <div id="app">
-      <b-container style="margin-top: 20px">
-        <b-form>
-          <b-row>
-            <b-col cols="12" md="6" sm="12">
-              <b-form-group label="Nome Completo">
-                <b-form-input
-                  v-model="nome"
-                  placeholder="Digite seu nome completo"
-                  required
-                ></b-form-input>
-              </b-form-group>
-            </b-col>
-            <b-col cols="12" md="3" sm="12">
-              <b-form-group label="Email">
-                <b-form-input
-                  v-model="email"
-                  type="email"
-                  placeholder="Digite seu e-mail"
-                  required
-                ></b-form-input>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="12" md="3" sm="12">
-              <b-form-group label="Telefone">
-                <b-form-input
-                  v-model="telefone"
-                  placeholder="Digite seu Telefone"
-                  required
-                ></b-form-input>
-              </b-form-group>
-            </b-col>
-            <b-col cols="12" md="3">
-              <b-form-group id="sexo" label="Sexo:">
-                <b-form-select
-                  id="sexo"
-                  v-model="sexo"
-                  :options="sexos"
-                  required
-                ></b-form-select>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-form-group>
-                <b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0"
-                  >Receber Informações por Email</b-form-checkbox
-                >
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-button type="submit" variant="primary" class="mr-3">Cadastrar</b-button>
-          <b-button type="reset" variant="danger">Resetar</b-button>
-        </b-form>
-      </b-container>
-    </div>
-   </template>
- 
-   <script>
-   export default {
-    name: "App",
-    data() {
-      return {
-        email: null,
-        nome: null,
-        sexo: null,
-        telefone: null,
-        sexos: [
-          { text: "Selecione", value: null },
-          "Masculino",
-          "Feminino",
-          "Outros",
-        ],
-      };
+  <div>
+    <h1>{{ this.action === "create" ? "Create" : "Edit" }} User</h1>
+    <b-form @submit="onSubmit">
+      <b-row>
+        <b-col md="6" sm="12">
+          <b-form-group label="Name:" label-for="user-name">
+            <b-form-input
+              id="input-user-name"
+              v-model="user.fullName"
+              placeholder="Enter name"
+              required
+            ></b-form-input>
+          </b-form-group>
+        </b-col>
+        <b-col md="6" sm="12">
+          <b-form-group
+            label="Email:"
+            label-for="user-email"
+            description="We'll never share your email with anyone else."
+          >
+            <b-form-input
+              id="input-user-email"
+              v-model="user.email"
+              type="email"
+              placeholder="Enter email"
+              required
+            ></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col md="2" sm="12">
+          <b-form-group label="Birth Date" label-for="user-birthDate">
+            <b-form-input
+              id="user-birthDate"
+              type="date"
+              v-model="user.birthDate"
+            >
+            </b-form-input>
+          </b-form-group>
+        </b-col>
+        <b-col md="4" sm="12">
+          <b-form-group label="Role:" label-for="user-role">
+            <b-form-select
+              id="select-user-role"
+              v-model="user.role"
+              :options="roles"
+              required
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col md="6" sm="12">
+          <b-form-group label="Password:" label-for="user-password">
+            <b-form-input
+              id="user-password"
+              type="password"
+              v-model="user.password"
+              required
+              placeholder="Informe a Senha do Usuário..."
+            />
+          </b-form-group>
+        </b-col>
+        <b-col md="6" sm="12">
+          <b-form-group
+            label="Confirm Password:"
+            label-for="user-confirm-password"
+          >
+            <b-form-input
+              id="user-confirm-password"
+              type="password"
+              v-model="user.confirmPassword"
+              required
+              placeholder="Confirme a Senha do Usuário..."
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <hr />
+      <b-button type="submit" variant="primary mr-2">Submit</b-button>
+      <b-button @click="cancel" variant="danger">Cancel</b-button>
+    </b-form>
+  </div>
+</template>
+  
+  <script>
+export default {
+  data() {
+    return {
+      action: "",
+      id: this.$route.params.id,
+      user: {},
+      roles: [
+        { text: " -- ", value: "", selected: true },
+        { text: "Admin", value: "1" },
+        { text: "User", value: "2" },
+      ],
+    };
+  },
+  methods: {
+    onSubmit(event) {
+      event.preventDefault();
+      const method = this.action === "create" ? "post" : "put";
+      this.$http[method]("/users", this.user).then(() => {
+        this.$router.push({ name: "users" });
+      });
     },
-    methods: {
-      cadastrar() {
-        console.log("Método para cadastrar o formulário");
-      },
-      reset() {
-        this.email = null;
-        this.nome = null;
-        this.sexo = null;
-        this.telefone = null;
-      },
-   },
-   };
-   </script>
+    cancel() {
+      this.$router.push({ name: "users" });
+    },
+    loadUser() {
+      const url = `/users/${this.id}`;
+      this.$http.get(url).then((res) => {
+        this.user = res.data;
+        console.log(this.user);
+      });
+    },
+  },
+  mounted() {
+    //this.action = this.$route?.params?.id ? 'edit' : 'create'
+    //if (this.action === 'edit')
+    //this.loadUser(this.$route?.params?.id)
+  },
+  created() {
+    this.action = this.$route?.params?.id ? "edit" : "create";
+
+    if (this.action === "edit") this.loadUser();
+  },
+  //   beforeCreate(){
+  //     console.log('teste')
+  //   }
+};
+</script>

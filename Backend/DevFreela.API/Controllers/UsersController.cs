@@ -11,7 +11,7 @@ namespace DevFreela.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -53,6 +53,15 @@ namespace DevFreela.API.Controllers
         {
             int id = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id }, command);
+        }
+
+        // api/users
+        [HttpPut]
+        [AllowAnonymous]
+        public async Task<IActionResult> Put([FromBody] EditUserCommand command)
+        {
+            await _mediator.Send(command);
+            return NoContent();
         }
 
         // api/users/login

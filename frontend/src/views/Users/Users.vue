@@ -1,5 +1,5 @@
 <template>
-  <div class="user w-75">
+  <b-container fluid>
     <b-form>
       <b-row>
         <b-col>
@@ -9,9 +9,6 @@
       <b-row>
         <b-col>
           <div class="d-flex justify-content-end">
-            <!-- <p>
-              <a class="text-right btn btn-outline-primary fa fa-plus"> New</a>
-            </p> -->
             <router-link to="/user/create" tag="a"
               class="text-right btn btn-outline-primary fa fa-plus">
               <a> New</a>
@@ -22,39 +19,59 @@
       <hr />
     </b-form>
 
+    <!-- <b-table :items="users" :busy="isBusy" class="mt-3" outlined>
+      <template #table-busy>
+        <div class="text-center text-danger my-2">
+          <b-spinner class="align-middle"></b-spinner>
+          <strong>Loading...</strong>
+        </div>
+      </template>
+    </b-table> -->
+
     <b-table
       class="table"
       hover
       striped
       :items="users"
       :fields="fields"
-      style="color: white"
+      head-variant="dark"
     >
       <template #cell(actions)="data">
-        <button @click="loadUser(data.item)" class="mr-2 btn btn-info" title="Detail" >
+        <b-button @click="data.toggleDetails" class="mr-2 btn btn-info" >
           <i class="fa fa-solid fa-eye"></i>
-        </button>
-        <button @click="loadUser(data.item)" class="mr-2 btn btn-warning" title="Edit">
+        </b-button>
+        <button @click="editUser(data.item.id)" class="mr-2 btn btn-warning" title="Edit">
           <i class="fa fa-pencil"></i>
         </button>
         <button class="btn btn-danger" @click="loadUser(data.item, 'remove')" title="Remove">
           <i class="fa fa-trash"></i>
         </button>
       </template>
+
+      <template #row-details="data">
+        <b-card>
+          <ul>
+            <li v-for="(value, key) in data.item" :key="key"><strong>{{ key }}:</strong> {{ value }}</li>
+          </ul>
+        </b-card>
+      </template>
     </b-table>
-  </div>
+  </b-container>
 </template>
 
 <script>
+/* eslint-disable */ 
 export default {
   name: "Users",
   data() {
     return {
+      isBusy: false,
       fields: [
         { key: "id", label: "Code", sortable: true },
         { key: "fullName", label: "Full Name", sortable: true },
         { key: "birthDate", label: "Birth Date", sortable: true },
-        { key: "active", label: "Active", sortable: true },
+        { key: "active", label: "Active", sortable: true,
+          formatter: value => value ? 'Yes' : 'No' },
         { key: "actions", label: "Actions" },
       ],
       users: [],
@@ -66,6 +83,15 @@ export default {
         this.users = res.data;
       });
     },
+    editUser(id){
+      this.$router.push({
+        name: 'user-create-id',
+        params: {id}
+      })
+    },
+    // toggleBusy() {
+    //     this.isBusy = true
+    //   },
   },
   mounted() {
     this.loadUsers();
@@ -74,7 +100,7 @@ export default {
 </script>
 
 <style scoped>
-.sr-only {
-  color: white !important;
+ul {
+  list-style-type: none;
 }
 </style>

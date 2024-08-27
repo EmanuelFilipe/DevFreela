@@ -21,8 +21,11 @@ namespace DevFreela.Application.Queries.GetUser
 
             UserDTO userDTO = new UserDTO
             {
+                Id = user.Id,
                 FullName = user.FullName,
                 Email = user.Email,
+                BirthDate = user.BirthDate,
+                Active = user.Active
             };
 
             return userDTO;
