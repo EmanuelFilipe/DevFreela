@@ -44,7 +44,7 @@
           <b-form-group label="Role:" label-for="user-role">
             <b-form-select
               id="select-user-role"
-              v-model="user.role"
+              v-model="selectedRole"
               :options="roles"
               required
             ></b-form-select>
@@ -54,9 +54,10 @@
           <b-form-group label="Active:" label-for="user-active">
             <b-form-select
               id="select-user-active"
-              v-model="user.active"
+              v-model="selectedActive"
               :options="active"
               required
+              :disabled="action === 'create'"
             ></b-form-select>
           </b-form-group>
         </b-col>
@@ -97,20 +98,24 @@
   
   <script>
 export default {
+  name: 'UserCreate',
   data() {
     return {
       action: "",
       id: this.$route.params.id,
+      birthDateFormated: '',
       user: {},
+      selectedRole: null,
       roles: [
-        { text: " -- ", value: "", selected: true },
+        { text: '-- Please select an option --', value: null },
         { text: "Admin", value: "admin" },
         { text: "Client", value: "client" },
       ],
       active: [
-        { text: "Active", value: true },
-        { text: "Inactive", value: false },
+        { text: "Yes", value: 1 },
+        { text: "No", value: 0 },
       ],
+      selectedActive: 1
     };
   },
   methods: {
@@ -118,6 +123,7 @@ export default {
       event.preventDefault();
       const method = this.action === "create" ? "post" : "put";
       this.$http[method]("/users", this.user).then(() => {
+        this.$toasted.global.defaultSuccess();
         this.$router.push({ name: "users" });
       });
     },
@@ -128,22 +134,17 @@ export default {
       const url = `/users/${this.id}`;
       this.$http.get(url).then((res) => {
         this.user = res.data;
-        console.log('user', this.user)
+        this.selectedRole = this.user.role
+        this.selectedActive = this.user.active ? 1 : 0
+        //this.user.birthDate = (this.user.birthDate | formatDate)
       });
+      
     },
-  },
-  mounted() {
-    //this.action = this.$route?.params?.id ? 'edit' : 'create'
-    //if (this.action === 'edit')
-    //this.loadUser(this.$route?.params?.id)
   },
   created() {
     this.action = this.$route?.params?.id ? "edit" : "create";
 
     if (this.action === "edit") this.loadUser();
   },
-  //   beforeCreate(){
-  //     console.log('teste')
-  //   }
 };
 </script>

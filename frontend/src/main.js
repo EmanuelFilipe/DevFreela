@@ -10,8 +10,16 @@ import store from './store'
 import './plugins/axios'
 //import './style.css'
 import 'font-awesome/css/font-awesome.css'
+import './config/toasted'
 
 Vue.config.productionTip = false
+
+Vue.filter('formatDate', function(value) {
+  console.log('value', value)
+  const date = new Date(value).toLocaleDateString()
+  console.log('date', date)
+  return date
+})
 
 new Vue({
   router,

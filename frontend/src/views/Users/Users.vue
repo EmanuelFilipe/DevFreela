@@ -10,11 +10,11 @@
         <b-col>
           <div class="d-flex justify-content-end">
             <router-link
-              to="/user/create"
+              to="/user"
               tag="a"
               class="text-right btn btn-outline-primary fa fa-plus"
             >
-              <a> New</a>
+              <a><strong> New</strong></a>
             </router-link>
           </div>
         </b-col>
@@ -39,6 +39,9 @@
       :fields="fields"
       head-variant="dark"
     >
+    <template #cell(birthDate)="row">
+      {{ row.item.birthDate | formatDate }}
+    </template>
       <template #cell(actions)="data">
         <b-button @click="data.toggleDetails" class="mr-2 btn btn-info">
           <i class="fa fa-solid fa-eye"></i>
@@ -54,7 +57,7 @@
         <button
           class="btn btn-danger"
           @click="openDeleteModal(data.item.id)"
-          title="Remove"
+          title="Disable"
         >
           <i class="fa fa-trash"></i>
         </button>
@@ -99,7 +102,7 @@
               <span class="details-value">{{ data.item.id }}</span>
             </div>
             <div class="details-item">
-              <span class="details-label">Nome Completo:</span>
+              <span class="details-label">Full Name:</span>
               <span class="details-value">{{ data.item.fullName }}</span>
             </div>
             <div class="details-item">
@@ -107,9 +110,9 @@
               <span class="details-value">{{ data.item.email }}</span>
             </div>
             <div class="details-item">
-              <span class="details-label">Data de Nascimento:</span>
+              <span class="details-label">Birth Date:</span>
               <span class="details-value">{{
-                new Date(data.item.birthDate).toLocaleDateString()
+                data.item.birthDate | formatDate
               }}</span>
             </div>
             <div class="details-item">
@@ -117,9 +120,9 @@
               <span class="details-value">{{ data.item.role }}</span>
             </div>
             <div class="details-item">
-              <span class="details-label">Ativo:</span>
+              <span class="details-label">Active?</span>
               <span class="details-value">{{
-                data.item.active ? "Sim" : "Não"
+                data.item.active ? "Yes" : "No"
               }}</span>
             </div>
           </div>
@@ -145,6 +148,7 @@
 </template>
 
 <script>
+import { showError } from '@/global'
 /* eslint-disable */
 export default {
   name: "Users",
@@ -152,7 +156,7 @@ export default {
     return {
       isBusy: false,
       fields: [
-        { key: "id", label: "Code", sortable: true },
+        //{ key: "id", label: "Code", sortable: true },
         { key: "fullName", label: "Full Name", sortable: true },
         { key: "birthDate", label: "Birth Date", sortable: true },
         {
@@ -161,6 +165,7 @@ export default {
           sortable: true,
           formatter: (value) => (value ? "Yes" : "No"),
         },
+        { key: 'role', label: "Role", sortable: true },
         { key: "actions", label: "Actions" },
       ],
       users: [],
@@ -174,13 +179,16 @@ export default {
   },
   methods: {
     loadUsers() {
-      this.$http.get("/users").then((res) => {
+      this.$http.get("/users")
+      .then((res) => {
         this.users = res.data;
-      });
+        console.log(this.users)
+      })
+      .catch(showError);
     },
     editUser(id) {
       this.$router.push({
-        name: "user-create-id",
+        name: "user-edit",
         params: { id },
       });
     },
@@ -208,8 +216,10 @@ export default {
       if (this.selectedId && this.selectedId > 0)
         this.$http.delete(`/users/${this.selectedId}`)
                   .then(() => {
+                    this.$toasted.global.defaultSuccess();
                     this.loadUsers()
                   })
+                  .catch(showError);
     },
     // toggleBusy() {
     //     this.isBusy = true
@@ -229,6 +239,7 @@ ul {
 .card-body {
   padding: 20px 50px 20px 50px;
   font-size: 14px;
+  width: 50%;
 }
 
 .details-card {
@@ -236,6 +247,7 @@ ul {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   background-color: #fff;
+  align-items: center;
 }
 
 .details-container {
@@ -259,4 +271,5 @@ ul {
 .details-value {
   color: #555;
 }
+
 </style>

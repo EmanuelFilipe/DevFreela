@@ -2,9 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Users from '@/views/Users/Users.vue'
-import UserCreate from '@/views/Users/UserCreate.vue'
+import User from '@/views/Users/User.vue'
 import Projects from '@/views/Projects/Projects.vue'
-import Teste from '@/views/Users/Teste.vue'
 
 Vue.use(VueRouter)
 
@@ -20,19 +19,14 @@ const routes = [
     component: Users
   },
   {
-    path: '/user/create',
-    name: 'user-create',
-    component: UserCreate
+    path: '/user',
+    name: 'user',
+    component: User
   },
   {
-    path: '/user/create/:id',
-    name: 'user-create-id',
-    component: UserCreate
-  },
-  {
-    path: '/teste',
-    name: 'teste',
-    component: Teste
+    path: '/user/:id',
+    name: 'user-edit',
+    component: User
   },
   {
     path: '/projects',
