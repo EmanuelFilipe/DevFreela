@@ -1,6 +1,7 @@
 ﻿using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.LoginUser;
+using DevFreela.Application.Commands.User.DeleteUser;
 using DevFreela.Application.Queries.GetAllUsers;
 using DevFreela.Application.Queries.GetUser;
 using MediatR;
@@ -60,6 +61,14 @@ namespace DevFreela.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Put([FromBody] EditUserCommand command)
         {
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var command = new DeleteUserCommand(id);
             await _mediator.Send(command);
             return NoContent();
         }

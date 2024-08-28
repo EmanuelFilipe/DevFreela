@@ -50,6 +50,16 @@
             ></b-form-select>
           </b-form-group>
         </b-col>
+        <b-col md="4" sm="12">
+          <b-form-group label="Active:" label-for="user-active">
+            <b-form-select
+              id="select-user-active"
+              v-model="user.active"
+              :options="active"
+              required
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
       </b-row>
       <b-row>
         <b-col md="6" sm="12">
@@ -96,6 +106,10 @@ export default {
         { text: " -- ", value: "", selected: true },
         { text: "Admin", value: "1" },
         { text: "User", value: "2" },
+      ],
+      active: [
+        { text: "Active", value: "1" },
+        { text: "Desactive", value: "2" },
       ],
     };
   },
