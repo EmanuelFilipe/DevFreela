@@ -25,6 +25,7 @@ namespace DevFreela.Application.Queries.GetUser
                 FullName = user.FullName,
                 Email = user.Email,
                 BirthDate = user.BirthDate,
+                Role = user.Role,
                 Active = user.Active
             };
 

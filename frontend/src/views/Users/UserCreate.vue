@@ -104,12 +104,12 @@ export default {
       user: {},
       roles: [
         { text: " -- ", value: "", selected: true },
-        { text: "Admin", value: "1" },
-        { text: "User", value: "2" },
+        { text: "Admin", value: "admin" },
+        { text: "Client", value: "client" },
       ],
       active: [
-        { text: "Active", value: "1" },
-        { text: "Desactive", value: "2" },
+        { text: "Active", value: true },
+        { text: "Inactive", value: false },
       ],
     };
   },
@@ -128,7 +128,7 @@ export default {
       const url = `/users/${this.id}`;
       this.$http.get(url).then((res) => {
         this.user = res.data;
-        console.log(this.user);
+        console.log('user', this.user)
       });
     },
   },

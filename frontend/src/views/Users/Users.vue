@@ -59,13 +59,13 @@
           <i class="fa fa-trash"></i>
         </button>
 
-        <b-button
+        <!-- <b-button
           size="sm"
           @click="info(data.item, data.index, $event.target)"
           class="mr-1"
         >
           Info modal
-        </b-button>
+        </b-button> -->
       </template>
 
       <template #row-details="data">
@@ -95,7 +95,7 @@
         <b-card class="details-card">
           <div class="details-container">
             <div class="details-item">
-              <span class="details-label text-right">ID:</span>
+              <span class="details-label text-right">Id:</span>
               <span class="details-value">{{ data.item.id }}</span>
             </div>
             <div class="details-item">
@@ -111,6 +111,10 @@
               <span class="details-value">{{
                 new Date(data.item.birthDate).toLocaleDateString()
               }}</span>
+            </div>
+            <div class="details-item">
+              <span class="details-label">Role:</span>
+              <span class="details-value">{{ data.item.role }}</span>
             </div>
             <div class="details-item">
               <span class="details-label">Ativo:</span>
@@ -222,8 +226,9 @@ ul {
   list-style-type: none;
 }
 
-.card-box {
-  padding: 20px 50px 20px 50px !important;
+.card-body {
+  padding: 20px 50px 20px 50px;
+  font-size: 14px;
 }
 
 .details-card {
