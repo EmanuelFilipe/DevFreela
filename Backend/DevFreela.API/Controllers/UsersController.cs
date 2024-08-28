@@ -1,9 +1,9 @@
-﻿using DevFreela.API.Models;
-using DevFreela.Application.Commands.CreateUser;
-using DevFreela.Application.Commands.LoginUser;
+﻿using DevFreela.Application.Commands.LoginUser;
+using DevFreela.Application.Commands.User.CreateUser;
 using DevFreela.Application.Commands.User.DeleteUser;
-using DevFreela.Application.Queries.GetAllUsers;
-using DevFreela.Application.Queries.GetUser;
+using DevFreela.Application.Commands.User.EditUser;
+using DevFreela.Application.Queries.User.GetAllUsers;
+using DevFreela.Application.Queries.User.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

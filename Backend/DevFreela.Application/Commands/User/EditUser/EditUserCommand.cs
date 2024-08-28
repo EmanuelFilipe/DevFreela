@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace DevFreela.Application.Commands.CreateUser
+namespace DevFreela.Application.Commands.User.EditUser
 {
     public class EditUserCommand : IRequest<Unit>
     {

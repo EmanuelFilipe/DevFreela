@@ -40,7 +40,7 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             using (var sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
-                var script = "SELECT Id, FullName, Email , BirthDate, Active " +
+                var script = "SELECT Id, FullName, Email , BirthDate, Role, Active " +
                              "  FROM Users";
                 var users = await sqlConnection.QueryAsync<UserDTO>(script);
 

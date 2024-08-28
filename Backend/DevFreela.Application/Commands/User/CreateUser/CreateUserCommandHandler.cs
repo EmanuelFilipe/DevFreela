@@ -2,7 +2,7 @@
 using DevFreela.Core.Services;
 using MediatR;
 
-namespace DevFreela.Application.Commands.CreateUser
+namespace DevFreela.Application.Commands.User.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
     {

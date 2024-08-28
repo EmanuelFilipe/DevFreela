@@ -1,7 +1,7 @@
 ﻿using DevFreela.Core.DTOs;
 using MediatR;
 
-namespace DevFreela.Application.Queries.GetUser
+namespace DevFreela.Application.Queries.User.GetUser
 {
     public class GetUserQuery : IRequest<UserDTO>
     {

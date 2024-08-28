@@ -3,7 +3,7 @@ using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
 using MediatR;
 
-namespace DevFreela.Application.Commands.CreateUser
+namespace DevFreela.Application.Commands.User.EditUser
 {
     public class EditUserCommandHandler : IRequestHandler<EditUserCommand, Unit>
     {
