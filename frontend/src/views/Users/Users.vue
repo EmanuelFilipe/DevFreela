@@ -3,7 +3,8 @@
     <b-form>
       <b-row>
         <b-col>
-          <h1 class="text-center">Users</h1>
+          <!-- <h1 class="text-center">Users</h1> -->
+          <h1 class="display-2 font-weight-light">Users</h1>
         </b-col>
       </b-row>
       <b-row>
@@ -12,7 +13,7 @@
             <router-link
               to="/user"
               tag="a"
-              class="text-right btn btn-outline-primary fa fa-plus"
+              class="text-right btn-lg btn btn-outline-primary fa fa-plus"
             >
               <a><strong> New</strong></a>
             </router-link>
@@ -39,14 +40,19 @@
       :fields="fields"
       head-variant="dark"
     >
-    <template #cell(birthDate)="row">
-      {{ row.item.birthDate | formatDate }}
-    </template>
+      <template #cell(birthDate)="row">
+        {{ row.item.birthDate | formatDate }}
+      </template>
       <template #cell(actions)="data">
-        <b-button @click="data.toggleDetails" class="mr-2 btn btn-info">
+        <b-button
+          id="btn-detail-user"
+          @click="data.toggleDetails"
+          class="mr-2 btn btn-info"
+        >
           <i class="fa fa-solid fa-eye"></i>
         </b-button>
         <button
+          id="btn-edit-user"
           @click="editUser(data.item.id)"
           class="mr-2 btn btn-warning"
           title="Edit"
@@ -55,20 +61,13 @@
         </button>
 
         <button
+          id="btn-disabled-user"
           class="btn btn-danger"
           @click="openDeleteModal(data.item.id)"
           title="Disable"
         >
           <i class="fa fa-trash"></i>
         </button>
-
-        <!-- <b-button
-          size="sm"
-          @click="info(data.item, data.index, $event.target)"
-          class="mr-1"
-        >
-          Info modal
-        </b-button> -->
       </template>
 
       <template #row-details="data">
@@ -95,10 +94,12 @@
     </b-row>
   </b-card> -->
 
-        <b-card class="details-card">
+        <b-card class="details-card" id="modal-detail-user">
           <div class="details-container">
             <div class="details-item">
-              <span class="details-label text-right">Id:</span>
+              <span class="details-label text-right" id="modal-detail-user-id"
+                >Id:</span
+              >
               <span class="details-value">{{ data.item.id }}</span>
             </div>
             <div class="details-item">
@@ -121,7 +122,7 @@
             </div>
             <div class="details-item">
               <span class="details-label">Active?</span>
-              <span class="details-value">{{
+              <span class="details-value" id="detail-user-active-value">{{
                 data.item.active ? "Yes" : "No"
               }}</span>
             </div>
@@ -148,7 +149,7 @@
 </template>
 
 <script>
-import { showError } from '@/global'
+import { showError } from "@/global";
 /* eslint-disable */
 export default {
   name: "Users",
@@ -165,7 +166,7 @@ export default {
           sortable: true,
           formatter: (value) => (value ? "Yes" : "No"),
         },
-        { key: 'role', label: "Role", sortable: true },
+        { key: "role", label: "Role", sortable: true },
         { key: "actions", label: "Actions" },
       ],
       users: [],
@@ -179,12 +180,12 @@ export default {
   },
   methods: {
     loadUsers() {
-      this.$http.get("/users")
-      .then((res) => {
-        this.users = res.data;
-        console.log(this.users)
-      })
-      .catch(showError);
+      this.$http
+        .get("/users")
+        .then((res) => {
+          this.users = res.data;
+        })
+        .catch(showError);
     },
     editUser(id) {
       this.$router.push({
@@ -209,17 +210,18 @@ export default {
     },
     resetInfoModal() {},
     openDeleteModal(id) {
-      this.selectedId = id; 
-      this.$bvModal.show("deleteModal"); 
+      this.selectedId = id;
+      this.$bvModal.show("deleteModal");
     },
     confirmDelete() {
       if (this.selectedId && this.selectedId > 0)
-        this.$http.delete(`/users/${this.selectedId}`)
-                  .then(() => {
-                    this.$toasted.global.defaultSuccess();
-                    this.loadUsers()
-                  })
-                  .catch(showError);
+        this.$http
+          .delete(`/users/${this.selectedId}`)
+          .then(() => {
+            this.$toasted.global.defaultSuccess();
+            this.loadUsers();
+          })
+          .catch(showError);
     },
     // toggleBusy() {
     //     this.isBusy = true
@@ -271,5 +273,4 @@ ul {
 .details-value {
   color: #555;
 }
-
 </style>
