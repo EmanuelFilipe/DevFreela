@@ -1,5 +1,7 @@
 # DevFreela
 
+![2024-08-2919-36-40-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/18254058-c141-4526-a70d-33251424af9e)
+
 ### English
 
 Complete REST API for a freelance projects management system.
@@ -29,6 +31,27 @@ To run the project, you must first start RabbitMQ with the following command:
 Access: http://localhost:15672/
 
 Log in with username/password: **guest**
+
+## Frontend:
+- was made with Vue.js 2
+- using vue-router, vuex (for state management), axios, unity test, test e2e, vuetity, bootstrap-vue, vue-toasted
+  
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+********************************************************
 ********************************************************
 
 ### Português
@@ -60,3 +83,22 @@ Para executar o projeto deve primeiro executar o rabbitmq com o comando:
 acessar: http://localhost:15672/
 
 entrar com usuario/senha: **guest**
+
+## Frontend:
+- foi feito com Vue.js 2
+- using vue-router, vuex (para gerenciamento de estado), axios, unity test, test e2e, vuetity, bootstrap-vue, vue-toasted
+
+### Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+``` 
