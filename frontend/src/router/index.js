@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import Users from '@/views/Users/Users.vue'
 import User from '@/views/Users/User.vue'
 import Projects from '@/views/Projects/Projects.vue'
+import Auth from '@/views/Auth/Auth.vue'
 
 Vue.use(VueRouter)
 
@@ -33,9 +34,11 @@ const routes = [
     name: 'projects',
     component: Projects
   },
-  
-  
-]
+  {
+    name: 'auth',
+    path: '/auth',
+    component: Auth
+  }]
 
 const router = new VueRouter({
   mode: 'history',

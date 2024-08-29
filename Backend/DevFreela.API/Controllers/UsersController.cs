@@ -12,7 +12,7 @@ namespace DevFreela.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -24,7 +24,6 @@ namespace DevFreela.API.Controllers
 
         // api/users/1
         [HttpGet("{id}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var query = new GetUserQuery(id);
@@ -36,7 +35,6 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var query = new GetAllUsersQuery();
@@ -58,7 +56,6 @@ namespace DevFreela.API.Controllers
 
         // api/users
         [HttpPut]
-        [AllowAnonymous]
         public async Task<IActionResult> Put([FromBody] EditUserCommand command)
         {
             await _mediator.Send(command);

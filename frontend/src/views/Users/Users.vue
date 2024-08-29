@@ -62,6 +62,7 @@
         <button
           id="btn-disabled-user"
           class="btn btn-danger"
+          :disabled="!data.item.active"
           @click="openDeleteModal(data.item.id)"
           title="Disable"
         >
@@ -156,7 +157,6 @@ export default {
     return {
       isBusy: false,
       fields: [
-        //{ key: "id", label: "Code", sortable: true },
         { key: "fullName", label: "Full Name", sortable: true },
         { key: "birthDate", label: "Birth Date", sortable: true },
         {

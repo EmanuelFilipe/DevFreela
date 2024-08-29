@@ -138,15 +138,13 @@ export default {
       });
     },
     cancel() {
-      this.$router.push({ name: "users" });
+      this.$router.go(-1);
     },
     loadUser() {
       const url = `/users/${this.id}`;
       this.$http.get(url).then((res) => {
         this.user = res.data;
         this.selectedRole = this.user.role
-        console.log('this.selectedRole ', this.selectedRole )
-        console.log('this.user.role', this.user.role)
         this.selectedActive = this.user.active ? 1 : 0
       });
     },
