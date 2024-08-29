@@ -35,7 +35,7 @@
             <b-form-input
               id="user-birthDate"
               type="date"
-              v-model="user.birthDate"
+              v-model="formattedBirthDate"
             >
             </b-form-input>
           </b-form-group>
@@ -118,6 +118,16 @@ export default {
       selectedActive: 1
     };
   },
+  computed: {
+    formattedBirthDate: {
+      get() {
+        return this.user.birthDate ? this.user.birthDate.split('T')[0] : '';
+      },
+      set(newValue) {
+        this.user.birthDate = newValue;
+      },
+    },
+  },
   methods: {
     onSubmit(event) {
       event.preventDefault();
@@ -134,6 +144,7 @@ export default {
       const url = `/users/${this.id}`;
       this.$http.get(url).then((res) => {
         this.user = res.data;
+        console.log(this.user.birthDate)
         this.selectedRole = this.user.role
         this.selectedActive = this.user.active ? 1 : 0
         //this.user.birthDate = (this.user.birthDate | formatDate)

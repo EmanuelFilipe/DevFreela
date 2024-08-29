@@ -10,7 +10,7 @@ import vuetify from './plugins/vuetify'
 import './plugins/axios'
 //import './style.css'
 import 'font-awesome/css/font-awesome.css'
-import './config/toasted'
+import '@/config/toasted'
 
 Vue.config.productionTip = false
 
