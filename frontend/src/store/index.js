@@ -18,9 +18,8 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user
-      console.log('state.user', state.user )
+
       if(user) {
-        console.log('setUser:user.token', user.token)
         axios.defaults.headers.common['Authorization'] = `bearer ${user.token}`
         state.isLoggedIn = true
       } else {
