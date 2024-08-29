@@ -22,7 +22,8 @@ namespace DevFreela.Application.Commands.User.EditUser
             //var user = new Core.Entities.User(request.FullName, request.Email, request.BirthDate, passwordHash, request.Role);
             var user = await _userRepository.GetByIdAsync(request.Id);
 
-            user.Update(request.Id, request.FullName, request.Email, request.BirthDate, request.Active);
+            user.Update(request.Id, request.FullName, request.Email, 
+                        request.BirthDate, request.Role, request.Active);
 
             await _userRepository.SaveChangesAsync();
 

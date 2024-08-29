@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>{{ this.action === "create" ? "Create" : "Edit" }} User</h1>
+    <h1 >{{ this.action === "create" ? "Create" : "Edit" }} User</h1>
     <b-form @submit="onSubmit">
-      <b-row>
-        <b-col md="6" sm="12">
+      <b-row class="mt-3">
+        <b-col md="6" sm="12" >
           <b-form-group label="Name:" label-for="user-name">
             <b-form-input
               id="input-user-name"
@@ -91,7 +91,7 @@
       </b-row>
       <hr />
       <b-button type="submit" variant="primary mr-2">Submit</b-button>
-      <b-button @click="cancel" variant="danger">Cancel</b-button>
+      <b-button @click="cancel" variant="secondary">Cancel</b-button>
     </b-form>
   </div>
 </template>
@@ -144,12 +144,11 @@ export default {
       const url = `/users/${this.id}`;
       this.$http.get(url).then((res) => {
         this.user = res.data;
-        console.log(this.user.birthDate)
         this.selectedRole = this.user.role
+        console.log('this.selectedRole ', this.selectedRole )
+        console.log('this.user.role', this.user.role)
         this.selectedActive = this.user.active ? 1 : 0
-        //this.user.birthDate = (this.user.birthDate | formatDate)
       });
-      
     },
   },
   created() {
@@ -157,5 +156,19 @@ export default {
 
     if (this.action === "edit") this.loadUser();
   },
+  watch: {
+    selectedRole(newVal) {
+      this.user.role = newVal;
+    },
+    selectedActive(value) {
+      this.user.active = value ? true : false
+    }
+  },
 };
 </script>
+
+<style scoped>
+button {
+  color: #fff;
+}
+</style>

@@ -3,8 +3,7 @@
     <b-form>
       <b-row>
         <b-col>
-          <!-- <h1 class="text-center">Users</h1> -->
-          <h1 class="display-2 font-weight-light">Users</h1>
+          <h1 class="display-2">Users</h1>
         </b-col>
       </b-row>
       <b-row>

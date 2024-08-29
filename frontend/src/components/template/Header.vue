@@ -5,7 +5,7 @@
             <span class="font-weight-light">Freela</span>
         </v-toolbar-title>
         <v-toolbar-items>
-            <v-btn text to="/" class="teste">Home</v-btn>
+            <v-btn text to="/">Home</v-btn>
             <v-btn text to="/users">Users</v-btn>
             <v-btn text to="/Projects">Projects</v-btn>
         </v-toolbar-items>
@@ -17,3 +17,9 @@ export default {
     name: 'Header'
 }
 </script>
+
+<style scoped>
+a {
+    text-decoration: none;
+}
+</style>
