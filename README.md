@@ -1,6 +1,8 @@
 # DevFreela
 
-![devfreela-crop-video-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/6c04b248-e403-4217-b6af-32a3192d64d8)
+![devfreela-crop-video-1](https://github.com/user-attachments/assets/85e60e8f-c579-4840-85f7-affe3e9568b0)
+
+![devfreela-crop-video-2](https://github.com/user-attachments/assets/283de65f-db5d-4b88-a4dd-f9f04717ab1b)
 
 ### English
 
