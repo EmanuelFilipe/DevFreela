@@ -36,7 +36,7 @@ Log in with username/password: **guest**
 
 ## Frontend:
 - was made with Vue.js 2
-- using vue-router, vuex (for state management), axios, unity test, test e2e, vuetity, bootstrap-vue, vue-toasted
+- using vue-router, vuex (for state management), axios, unity test, test e2e, vuetify, bootstrap-vue, vue-toasted
   
 ## Project setup
 ```
@@ -88,7 +88,7 @@ entrar com usuario/senha: **guest**
 
 ## Frontend:
 - foi feito com Vue.js 2
-- using vue-router, vuex (para gerenciamento de estado), axios, unity test, test e2e, vuetity, bootstrap-vue, vue-toasted
+- using vue-router, vuex (para gerenciamento de estado), axios, unity test, test e2e, vuetify, bootstrap-vue, vue-toasted
 
 ### Project setup
 ```
