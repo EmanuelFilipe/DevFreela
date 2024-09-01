@@ -90,8 +90,8 @@
         </b-col>
       </b-row>
       <hr />
-      <b-button type="submit" variant="primary mr-2">Submit</b-button>
-      <b-button @click="cancel" variant="secondary">Cancel</b-button>
+      <b-button type="submit" variant="primary mr-2" id="btn-save">Submit</b-button>
+      <b-button @click="cancel" variant="secondary" id="btn-cancel">Cancel</b-button>
     </b-form>
   </div>
 </template>
@@ -134,7 +134,7 @@ export default {
       const method = this.action === "create" ? "post" : "put";
       this.$http[method]("/users", this.user).then(() => {
         this.$toasted.global.defaultSuccess();
-        this.$router.push({ name: "users" });
+        this.$router.push({ name: "auth" });
       });
     },
     cancel() {

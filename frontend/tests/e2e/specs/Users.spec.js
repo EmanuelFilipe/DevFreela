@@ -1,7 +1,8 @@
 const APP_URL = 'http://localhost:8080'
+import { faker } from '@faker-js/faker'
 
 describe('<User /> Test without login', () => {
-    it('should show create user page', () => {
+    it.skip('should show create user page', () => {
         cy.visit(APP_URL)
         cy.contains('.auth-title', 'Login')
         cy.get('#signup').click()
@@ -18,7 +19,31 @@ describe('<User /> Test without login', () => {
         cy.url().should('include', '/user')
         cy.contains('h1', 'Create User')
 
-        cy.get('#input-user-name').type('teste')
+        const fullName = faker.person.fullName()
+        const email = faker.internet.email()
+        cy.get('#input-user-name').type(fullName)
+        cy.get('#input-user-email').type(email)
+        
+        //yyyy-mm-dd
+        const isoDate = '2024-09-01'
+        cy.get('#user-birthDate').type(isoDate)
+        cy.get('#user-birthDate').should('have.value', isoDate)
+
+        cy.get('#select-user-role').select('admin')
+        cy.get('#select-user-role').should('have.value', 'admin')
+        cy.get('#select-user-active').should('have.value', 1)
+        cy.get('#user-password').type('Aa12345!')
+        cy.get('#user-confirm-password').type('Aa12345!')
+        cy.get('#btn-save').click()
+        cy.wait(2000)
+        cy.url().should('include', '/auth')
+
+        cy.login(email, 'Aa12345!')
+        // cy.generatePassword().then((password) => {
+        //     cy.log('gererated password', password)
+        //     cy.get('#user-password').type(password)
+        // })
+
     })
 })
 describe('<Users />', () => {

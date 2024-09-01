@@ -28,6 +28,10 @@ npm run test:unit -- tests/unit/validators.spec.js
 npm run test:e2e
 ```
 
+## install faker
+```
+npm install @faker-js/faker --save-dev --legacy-peer-deps
+```
 ### Lints and fixes files
 ```
 npm run lint
