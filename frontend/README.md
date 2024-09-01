@@ -20,6 +20,7 @@ npm run build
 ### Run your unit tests
 ```
 npm run test:unit
+npm run test:unit -- tests/unit/validators.spec.js
 ```
 
 ### Run your end-to-end tests

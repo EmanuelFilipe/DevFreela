@@ -8,6 +8,7 @@
       </div>
       
       <input
+        id="user-email"
         v-model="user.email"
         name="email"
         placeholder="E-mail"
@@ -16,6 +17,7 @@
         required
       />
       <input
+        id="user-password"
         v-model="user.password"
         name="password"
         placeholder="Password"
@@ -23,10 +25,10 @@
         @keyup.enter="signin"
         required
       />
-      <button @click="signin">Enter</button>
+      <button @click="signin" id="btn-login">Enter</button>
       <a @click="signup">
         <span v-if="showSignup">Ja tem cadastro? Acesse o Login!</span>
-        <span v-else>Não tem cadastro? Registre-se aqui!</span>
+        <span v-else id="signup">Não tem cadastro? Registre-se aqui!</span>
       </a>
     </div>
   </div>
@@ -35,8 +37,7 @@
 <script>
 import { mapActions } from "vuex";
 import { userKey } from "@/global";
-import { isEmptyOrNull } from "@/utils/validators";
-//import axios from "axios";
+import {  validateEmptyAndEmail, ValidatePassword } from "@/utils/validators";
 export default {
   name: "Auth",
   data() {
@@ -52,14 +53,13 @@ export default {
       this.$router.push({ path: "/user" });
     },
     signin() {
-
-      const resultEmail = isEmptyOrNull('Email', this.user.email)
+      const resultEmail = validateEmptyAndEmail(this.user.email)
       if (resultEmail) {
         this.$toasted.global.defaultError({ msg: resultEmail })
         return
       }
 
-      const resultPassword = isEmptyOrNull('Password', this.user.password)
+      const resultPassword = ValidatePassword(this.user.password)
       if (resultPassword) {
         this.$toasted.global.defaultError({ msg: resultPassword })
         return

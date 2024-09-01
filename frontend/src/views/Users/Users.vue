@@ -133,12 +133,12 @@
 
     <b-modal
       id="deleteModal"
-      title="Confirmar Remoção"
+      title="Confirm Disabling"
       @ok="confirmDelete"
       ok-title="OK"
       cancel-title="Cancelar"
     >
-      <p>Você tem certeza que deseja remover este item?</p>
+      <p>Are you sure you want to disable this item?</p>
     </b-modal>
 
     <!-- Info modal -->
