@@ -15,7 +15,7 @@ namespace DevFreela.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+//[Authorize]
 public class ProjectsController : ControllerBase
 {
     private readonly OpeningTimeOption _option;
@@ -31,10 +31,9 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "client, freelancer")]
-    public async Task<IActionResult> Get([FromBody] string query)
+    //[Authorize(Roles = "client, freelancer")]
+    public async Task<IActionResult> Get([FromQuery] GetAllProjectsQuery getAllProjectsQuery)
     {
-        var getAllProjectsQuery = new GetAllProjectsQuery(query);
         var projects = await _mediator.Send(getAllProjectsQuery);
         
         if (projects is null) return NotFound();
@@ -54,7 +53,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "client")]
+    //[Authorize(Roles = "client")]
     public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
     {
         int id = await _mediator.Send(command);
