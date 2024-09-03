@@ -2,7 +2,7 @@ export function validateEmptyAndEmail(value) {
     if (!value)
         return 'E-mail is mandatory!'
 
-    const isValid = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(value)
+    const isValid = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(value)
 
     if (!isValid) {
         return 'This field must be a valid e-mail!'

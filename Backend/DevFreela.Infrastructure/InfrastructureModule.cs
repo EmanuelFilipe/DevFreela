@@ -22,6 +22,7 @@ namespace DevFreela.Infrastructure
         {
             services.AddData(configuration)
                     .AddRepositories()
+                    .AddUnitOfWork()
                     .AddServices()
                     .AddAuth(configuration);
 
@@ -80,6 +81,12 @@ namespace DevFreela.Infrastructure
 
             services.AddScoped<IAuthService, AuthService>();
 
+            return services;
+        }
+
+        private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnityOfWork>();
             return services;
         }
     }

@@ -97,6 +97,8 @@
 </template>
   
   <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'UserCreate',
   data() {
@@ -119,6 +121,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['isLoggedIn']),
     formattedBirthDate: {
       get() {
         return this.user.birthDate ? this.user.birthDate.split('T')[0] : '';
@@ -134,7 +137,9 @@ export default {
       const method = this.action === "create" ? "post" : "put";
       this.$http[method]("/users", this.user).then(() => {
         this.$toasted.global.defaultSuccess();
-        this.$router.push({ name: "auth" });
+        console.log('isloggin', this.isLoggedIn)
+        if (this.isLoggedIn) this.$router.push({ name: "users" });
+        else this.$router.push({ name: "auth" });
       });
     },
     cancel() {
@@ -150,6 +155,7 @@ export default {
     },
   },
   created() {
+    console.log('create')
     this.action = this.$route?.params?.id ? "edit" : "create";
 
     if (this.action === "edit") this.loadUser();

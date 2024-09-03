@@ -2,7 +2,7 @@ const APP_URL = 'http://localhost:8080'
 import { faker } from '@faker-js/faker'
 
 describe('<User /> Test without login', () => {
-    it.skip('should show create user page', () => {
+    it('should show create user page', () => {
         cy.visit(APP_URL)
         cy.contains('.auth-title', 'Login')
         cy.get('#signup').click()
@@ -32,18 +32,16 @@ describe('<User /> Test without login', () => {
         cy.get('#select-user-role').select('admin')
         cy.get('#select-user-role').should('have.value', 'admin')
         cy.get('#select-user-active').should('have.value', 1)
-        cy.get('#user-password').type('Aa12345!')
-        cy.get('#user-confirm-password').type('Aa12345!')
-        cy.get('#btn-save').click()
-        cy.wait(2000)
-        cy.url().should('include', '/auth')
 
-        cy.login(email, 'Aa12345!')
-        // cy.generatePassword().then((password) => {
-        //     cy.log('gererated password', password)
-        //     cy.get('#user-password').type(password)
-        // })
-
+        cy.generatePassword().then((password) => {
+            cy.log('gererated password', password)
+            cy.get('#user-password').type(password)
+            cy.get('#user-confirm-password').type(password)
+            cy.get('#btn-save').click()
+            cy.wait(2000)
+            cy.url().should('include', '/auth')
+            cy.login(email, password)
+        })
     })
 })
 describe('<Users />', () => {
@@ -52,15 +50,15 @@ describe('<Users />', () => {
         cy.wait(1000)
     })
 
-    it.skip('should be able to log in', () => {
+    it('should be able to log in', () => {
     })
 
-    it.skip('should render users page', () => {
+    it('should render users page', () => {
         cy.get('#title-users').click()
         cy.contains('h1', 'Users')
     })
 
-    it.skip('should render modal detail of the record on grid', () => {
+    it('should render modal detail of the record on grid', () => {
         cy.get('#title-users').click()
         cy.contains('h1', 'Users')
 
@@ -71,7 +69,7 @@ describe('<Users />', () => {
         cy.url().should('include', '/users')
     })
 
-    it.skip('should render warning delete modal after click on disable-button', () => {
+    it('should render warning delete modal after click on disable-button', () => {
         cy.get('#title-users').click()
         cy.wait(1000)
 
@@ -82,7 +80,7 @@ describe('<Users />', () => {
         cy.contains('p', 'Are you sure you want to disable this item?')
     })
 
-    it.skip('should render warning delete modal after click on disable-button', () => {
+    it('should render warning delete modal after click on disable-button', () => {
         cy.get('#title-users').click()
         cy.wait(1000)
 
@@ -97,7 +95,7 @@ describe('<Users />', () => {
         cy.get('.btn-primary').click()
     })
 
-    it.skip('should render different value when the status is desabled', () => {
+    it('should render different value when the status is desabled', () => {
         let oldStatus
         let newStatus
         cy.get('#title-users').click()

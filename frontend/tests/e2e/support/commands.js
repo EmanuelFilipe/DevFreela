@@ -18,12 +18,13 @@ Cypress.Commands.add('generatePassword', () => {
 function generatePassword() {
     const lowercase = faker.string.alpha({ count: 1, upcase: false }); // Letra minúscula
     const uppercase = faker.string.alpha({ count: 1, upcase: true }); // Letra maiúscula
-    const number = faker.datatype.number.int({ min: 0, max: 9 }) // Dígito
-    const special = faker.random.arrayElement(['!', '*', '@', '#', '$', '%', '^', '&', '+', '=']); // Caractere especial
+    const number = faker.number.int({ min: 0, max: 9 });
+    const special = faker.helpers.arrayElement(['!', '*', '@', '#', '$', '%', '^', '&', '+', '=']);
+
     const remainingLength = 4; // 8 (total) - 4 (1 minúscula, 1 maiúscula, 1 número, 1 especial)
     
     // Gerar caracteres adicionais para preencher a senha
-    const additionalChars = faker.random.alphaNumeric(remainingLength);
+    const additionalChars = faker.string.alphanumeric(remainingLength); // Gera uma string de 4 caracteres alfanuméricos
     
     // Combinar todos os componentes da senha
     let password = lowercase + uppercase + number + special + additionalChars;
