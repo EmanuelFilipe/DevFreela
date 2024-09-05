@@ -35,10 +35,15 @@
       class="table"
       hover
       striped
-      :items="users"
+      :items="paginatedItems"
       :fields="fields"
       head-variant="dark"
+      show-empty
     >
+      <template #empty>
+        <div class="text-center">No data available</div>
+      </template>
+
       <template #cell(birthDate)="row">
         {{ row.item.birthDate | formatDate }}
       </template>
@@ -145,7 +150,17 @@
     <b-modal :id="infoModal.id" :title="infoModal.title" @hide="resetInfoModal">
       <pre>{{ infoModal.content }}</pre>
     </b-modal>
+
+    <b-pagination
+      class="pagination"
+      v-model="currentPage"
+      :total-rows="totalRows"
+      :per-page="perPage"
+      aria-controls="table-users"
+      >
+    </b-pagination>
   </b-container>
+  
 </template>
 
 <script>
@@ -155,6 +170,9 @@ export default {
   name: "Users",
   data() {
     return {
+      currentPage: 1,
+      perPage: 10, // Quantidade de itens por página
+      totalRows: 0,
       isBusy: false,
       fields: [
         { key: "fullName", label: "Full Name", sortable: true },
@@ -183,6 +201,7 @@ export default {
         .get("/users")
         .then((res) => {
           this.users = res.data;
+          this.totalRows = this.users.length;
         })
         .catch(showError);
     },
@@ -226,6 +245,13 @@ export default {
     //     this.isBusy = true
     //   },
   },
+  computed: {
+    paginatedItems() {
+      const start = (this.currentPage - 1) * this.perPage
+      const end = this.currentPage * this.perPage
+      return this.users.slice(start, end)
+    }
+  },
   mounted() {
     this.loadUsers();
   },
@@ -233,6 +259,11 @@ export default {
 </script>
 
 <style scoped>
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 ul {
   list-style-type: none;
 }
