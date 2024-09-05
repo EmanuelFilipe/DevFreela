@@ -38,9 +38,9 @@ Log in with username/password: **guest**
 - was made with Vue.js 2
 - using vue-router, vuex (for state management), axios, unity test, test e2e, vuetify, bootstrap-vue, vue-toasted
   
-## Project setup
+# Project setup
 ```
-npm install
+npm install --force
 ```
 
 ### Compiles and hot-reloads for development
