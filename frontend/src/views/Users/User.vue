@@ -70,7 +70,7 @@
               type="password"
               v-model="user.password"
               required
-              placeholder="Informe a Senha do Usuário..."
+              placeholder="Enter User Password..."
             />
           </b-form-group>
         </b-col>
@@ -84,7 +84,7 @@
               type="password"
               v-model="user.confirmPassword"
               required
-              placeholder="Confirme a Senha do Usuário..."
+              placeholder="Confirm User Password..."
             />
           </b-form-group>
         </b-col>
@@ -97,7 +97,9 @@
 </template>
   
   <script>
+import { showError } from '@/global';
 import { mapGetters } from 'vuex';
+import {  validateEmptyAndEmail, ValidatePassword } from "@/utils/validators";
 
 export default {
   name: 'UserCreate',
@@ -112,6 +114,7 @@ export default {
         { text: '-- Please select an option --', value: null },
         { text: "Admin", value: "admin" },
         { text: "Client", value: "client" },
+        { text: "Freelancer", value: "freelancer" },
       ],
       active: [
         { text: "Yes", value: 1 },
@@ -134,13 +137,28 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
+
+      const resultEmail = validateEmptyAndEmail(this.user.email)
+      if (resultEmail) {
+        this.$toasted.global.defaultError({ msg: resultEmail })
+        return
+      }
+
+      const resultPassword = ValidatePassword(this.user.password)
+      if (resultPassword) {
+        this.$toasted.global.defaultError({ msg: resultPassword })
+        return
+      }
+
       const method = this.action === "create" ? "post" : "put";
-      this.$http[method]("/users", this.user).then(() => {
-        this.$toasted.global.defaultSuccess();
-        console.log('isloggin', this.isLoggedIn)
-        if (this.isLoggedIn) this.$router.push({ name: "users" });
-        else this.$router.push({ name: "auth" });
-      });
+      this.$http[method]("/users", this.user)
+          .then(() => {
+            this.$toasted.global.defaultSuccess();
+            console.log('isloggin', this.isLoggedIn)
+            if (this.isLoggedIn) this.$router.push({ name: "users" });
+            else this.$router.push({ name: "auth" });
+          })
+          .catch(showError)
     },
     cancel() {
       this.$router.go(-1);

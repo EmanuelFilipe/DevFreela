@@ -8,15 +8,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <div class="d-flex justify-content-end">
-            <router-link
-              to="/user"
-              tag="a"
-              class="text-right btn-lg btn btn-outline-primary fa fa-plus"
-            >
-              <a><strong> New</strong></a>
-            </router-link>
-          </div>
+          <ButtonCreate url="/user" />
         </b-col>
       </b-row>
       <hr />
@@ -142,6 +134,10 @@
       @ok="confirmDelete"
       ok-title="OK"
       cancel-title="Cancelar"
+      ok-class="custom-ok-btn" 
+      cancel-class="custom-cancel-btn"
+      ok-variant="primary"
+      cancel-variant="danger"
     >
       <p>Are you sure you want to disable this item?</p>
     </b-modal>
@@ -164,10 +160,14 @@
 </template>
 
 <script>
-import { showError } from "@/global";
+import ButtonCreate from "@/components/template/ButtonCreate.vue";
+import { showError, userKey } from "@/global";
 /* eslint-disable */
 export default {
   name: "Users",
+  components: {
+    ButtonCreate
+  },
   data() {
     return {
       currentPage: 1,
@@ -176,15 +176,26 @@ export default {
       isBusy: false,
       fields: [
         { key: "fullName", label: "Full Name", sortable: true },
-        { key: "birthDate", label: "Birth Date", sortable: true },
+        { key: "birthDate", label: "Birth Date", sortable: true,
+          thStyle: { width: '15%' },
+          tdStyle: { width: '15%' }
+         },
         {
           key: "active",
           label: "Active",
           sortable: true,
           formatter: (value) => (value ? "Yes" : "No"),
+          thStyle: { width: '15%' },
+          tdStyle: { width: '15%' }
         },
-        { key: "role", label: "Role", sortable: true },
-        { key: "actions", label: "Actions" },
+        { key: "role", label: "Role", sortable: true,
+          thStyle: { width: '15%' },
+          tdStyle: { width: '15%' }
+        },
+        { key: "actions", label: "Actions", 
+          thStyle: { width: '15%' },
+          tdStyle: { width: '15%' }
+        },
       ],
       users: [],
       infoModal: {
@@ -203,7 +214,21 @@ export default {
           this.users = res.data;
           this.totalRows = this.users.length;
         })
-        .catch(showError);
+        .catch((er) => {
+          console.error('erro chamada user', er)
+          if (er.response && er.response.status === 401) {
+            // Exibe uma mensagem de erro
+            alert("Sessão expirada. Por favor, faça login novamente.");
+
+            // Redireciona para a tela de login
+            localStorage.removeItem(userKey)
+            this.$store.commit('setUser', null)
+            this.$router.push({ path: '/auth'})
+          } else {
+            // Exibe outros erros, se houver
+            alert("Ocorreu um erro ao carregar os usuários.");
+          }
+        });
     },
     editUser(id) {
       this.$router.push({
@@ -303,4 +328,9 @@ ul {
 .details-value {
   color: #555;
 }
+.custom-cancel-btn,
+.custom-ok-btn  {
+  color: white;
+}
+
 </style>

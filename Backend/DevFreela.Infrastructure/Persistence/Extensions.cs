@@ -20,6 +20,10 @@ namespace DevFreela.Infrastructure.Persistence
             var pageCount = (double)result.ItemsCount / pageSize;
             result.TotalPages = (int)Math.Ceiling(pageCount);
 
+            // Verifica se a página atual excede o número total de páginas
+            if (result.Page > result.TotalPages)
+                result.Page = result.TotalPages;
+
             var skip = (page - 1) * pageSize;
 
 

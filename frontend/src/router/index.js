@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Auth from '@/views/Auth/Auth.vue'
 import Users from '@/views/Users/Users.vue'
 import User from '@/views/Users/User.vue'
 import Projects from '@/views/Projects/Projects.vue'
-import Auth from '@/views/Auth/Auth.vue'
+import Project from '@/views/Projects/Project.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,16 @@ const routes = [
     path: '/projects',
     name: 'projects',
     component: Projects
+  },
+  {
+    path: '/project',
+    name: 'project-create',
+    component: Project
+  },
+  {
+    path: '/project/:id',
+    name: 'project-edit',
+    component: Project
   },
   {
     name: 'auth',

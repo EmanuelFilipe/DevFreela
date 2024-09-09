@@ -15,8 +15,17 @@ import '@/config/toasted'
 Vue.config.productionTip = false
 
 Vue.filter('formatDate', function(value) {
+  if (!value) return ''
   const date = new Date(value).toLocaleDateString()
   return date
+})
+
+Vue.filter('formatDateTime', function(value) {
+  if (!value) return ''
+  const date = new Date(value)
+  const formattedDate = date.toLocaleDateString()
+  const formattedTime = date.toLocaleTimeString()
+  return `${formattedDate} ${formattedTime}`
 })
 
 new Vue({

@@ -58,7 +58,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .main {
   background-color: #fdfdfdea;
 }
@@ -92,4 +92,10 @@ export default {
 .slide-leave-active {
   animation: slide-out 0.3s ease;
 }
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 </style>
