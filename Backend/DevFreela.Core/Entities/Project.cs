@@ -32,7 +32,7 @@ namespace DevFreela.Core.Entities
         public void Cancel()
         {
             if (Status == ProjectStatusEnum.InProgress)
-                Status = ProjectStatusEnum.Cancelled;
+                Status = ProjectStatusEnum.Canceled;
         }
 
         public void Finish()
@@ -59,10 +59,12 @@ namespace DevFreela.Core.Entities
             }
         }
 
-        public void Update(string title, string description, decimal totalCost)
+        public void Update(string title, string description, int idClient, int idFreelancer, decimal totalCost)
         {
             Title = title;
             Description = description;
+            IdClient = idClient;
+            IdFreelancer = idFreelancer;
             TotalCost = totalCost;
         }
     }

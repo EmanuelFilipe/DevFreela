@@ -28,7 +28,9 @@ namespace DevFreela.Application.Queries.GetProjectById
                 StartedAt = project.StartedAt,
                 FinishedAt = project.FinishedAt,
                 Status = project.Status.ToString(),
+                IdClient = project.IdClient,
                 ClientFullName = project?.Client?.FullName,
+                IdFreelancer = project.IdFreelancer,
                 FreelancerFullName = project?.Freelancer.FullName
             };
 

@@ -9,7 +9,9 @@
         public DateTime? StartedAt { get; set; }
         public DateTime? FinishedAt { get; set; }
         public string Status { get; set; }
+        public int IdClient { get; set; }
         public string ClientFullName { get; set; }
+        public int IdFreelancer { get; set; }
         public string FreelancerFullName { get; set; }
     }
 }

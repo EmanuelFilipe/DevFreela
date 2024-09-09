@@ -26,7 +26,7 @@ namespace DevFreela.UnitTests.Core.Entities
         }
 
         [Fact]
-        public void TestIfProjectCancelledWorks()
+        public void TestIfProjectCanceledWorks()
         {
             var project = new Project("Nome de teste", "Descrição de teste", 1, 2, 10000);
 
@@ -45,7 +45,7 @@ namespace DevFreela.UnitTests.Core.Entities
             Assert.NotNull(project.StartedAt);
 
             project.Cancel();
-            Assert.Equal(ProjectStatusEnum.Cancelled, project.Status);
+            Assert.Equal(ProjectStatusEnum.Canceled, project.Status);
         }
 
         [Fact]

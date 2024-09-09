@@ -131,7 +131,7 @@
     <b-modal
       id="deleteModal"
       title="Confirm Disabling"
-      @ok="confirmDelete"
+      @ok="confirmDisable"
       ok-title="OK"
       cancel-title="Cancelar"
       ok-class="custom-ok-btn" 
@@ -218,7 +218,7 @@ export default {
           console.error('erro chamada user', er)
           if (er.response && er.response.status === 401) {
             // Exibe uma mensagem de erro
-            alert("Sessão expirada. Por favor, faça login novamente.");
+            alert("Session expired. Please login again.");
 
             // Redireciona para a tela de login
             localStorage.removeItem(userKey)
@@ -256,7 +256,7 @@ export default {
       this.selectedId = id;
       this.$bvModal.show("deleteModal");
     },
-    confirmDelete() {
+    confirmDisable() {
       if (this.selectedId && this.selectedId > 0)
         this.$http
           .delete(`/users/${this.selectedId}`)

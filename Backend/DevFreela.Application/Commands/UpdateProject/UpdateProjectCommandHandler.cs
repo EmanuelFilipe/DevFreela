@@ -15,7 +15,8 @@ namespace DevFreela.Application.Commands.UpdateProject
         public async Task<Unit> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
             var project = await _projectRepository.GetByIdAsync(request.Id);
-            project.Update(request.Title, request.Description, request.TotalCost);
+            project.Update(request.Title, request.Description, request.IdClient, 
+                           request.IdFreelancer, request.TotalCost);
 
             await _projectRepository.SaveChangesAsync();
 

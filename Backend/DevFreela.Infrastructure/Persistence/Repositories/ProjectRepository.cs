@@ -23,12 +23,13 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
 
         public async Task<PaginationResult<Project>> GetAllAsync(string query, int page)
         {
-            IQueryable<Project> projects = _dbContext.Projects;
+            IQueryable<Project> projects = _dbContext.Projects
+                                                     .Include(p => p.Client)
+                                                     .Include(p => p.Freelancer);
 
             if (!string.IsNullOrWhiteSpace(query))
             {
-                projects = projects.Where(p => p.Title.Contains(query) || 
-                                               p.Description.Contains(query));
+                projects = projects.Where(p => p.Title.Contains(query) || p.Description.Contains(query));
             }
             return await projects.GetPaged(page, PAGE_SIZE);
         }
