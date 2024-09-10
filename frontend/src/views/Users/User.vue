@@ -154,7 +154,6 @@ export default {
       this.$http[method]("/users", this.user)
           .then(() => {
             this.$toasted.global.defaultSuccess();
-            console.log('isloggin', this.isLoggedIn)
             if (this.isLoggedIn) this.$router.push({ name: "users" });
             else this.$router.push({ name: "auth" });
           })
@@ -173,9 +172,7 @@ export default {
     },
   },
   created() {
-    console.log('create')
     this.action = this.$route?.params?.id ? "edit" : "create";
-
     if (this.action === "edit") this.loadUser();
   },
   watch: {

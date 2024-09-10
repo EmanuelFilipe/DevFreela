@@ -63,17 +63,17 @@
             />
           </b-form-group>
         </b-col>
-        <!-- <b-col md="6" sm="12">
+        <b-col md="6" sm="12">
           <b-form-group label="Status:" label-for="project-status">
             <b-form-select
               id="select-project-status"
               v-model="selectedStatus"
               :options="status"
               required
-              :disabled="action === 'create'"
+              :disabled="true"
             ></b-form-select>
           </b-form-group>
-        </b-col> -->
+        </b-col>
       </b-row>
       <hr />
       <b-button type="submit" variant="primary mr-2" id="btn-save"
@@ -132,7 +132,6 @@ export default {
       this.$http
         .get("/users")
         .then((res) => {
-          console.log("usuarios", res.data);
           const response = res.data;
           this.clients.unshift({
             text: "-- Please select an option --",
@@ -159,14 +158,13 @@ export default {
     loadProject() {
       this.$http.get(`/projects/${this.id}`).then((res) => {
         this.project = res.data;
-        console.log("project:status", res.data.status);
         this.selectedClient = res.data.idClient;
         this.selectedFreelancer = res.data.idFreelancer;
         this.getValueStatus(res.data.status)
       });
     },
     cancel() {
-      this.$router.push({ name: "projects" });
+        this.$router.go(-1);
     },
     preventNegative() {
       // Verifica se o valor do project.totalCost é negativo

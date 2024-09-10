@@ -178,16 +178,14 @@ export default {
                 query: this.query,
                 page: this.currentPage 
             };
-            console.log('url', `/projects?Page=${this.currentPage}`)
             this.$http
             .get("/projects", { params })
                 .then((res) => {
                     this.projects = null
                     const responseData = res.data
-                    this.projects = responseData.data // Todos os projetos retornados da API
-                    this.totalRows = responseData.itemsCount // Total de registros
+                    this.projects = responseData.data
+                    this.totalRows = responseData.itemsCount
                     this.perPage = responseData.pageSize
-                    console.log('response API', res.data)
                 })
                 .catch((err) => {
                     console.error("Error fetching projects:", err);

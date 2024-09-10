@@ -80,7 +80,7 @@ describe('<Users />', () => {
         cy.contains('p', 'Are you sure you want to disable this item?')
     })
 
-    it('should render warning delete modal after click on disable-button', () => {
+    it('should be able to click on OK button', () => {
         cy.get('#title-users').click()
         cy.wait(1000)
 
@@ -89,9 +89,6 @@ describe('<Users />', () => {
 
         cy.contains('#deleteModal___BV_modal_title_', 'Confirm Disabling')
         cy.contains('p', 'Are you sure you want to disable this item?')
-
-        cy.get('#btn-disabled-user').click()
-        cy.get('#deleteModal')
         cy.get('.btn-primary').click()
     })
 
