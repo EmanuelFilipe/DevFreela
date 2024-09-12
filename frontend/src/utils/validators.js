@@ -5,7 +5,7 @@ export function validateEmptyAndEmail(value) {
     const isValid = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(value)
 
     if (!isValid) {
-        return 'This field must be a valid e-mail!'
+        return 'E-mail field must be a valid e-mail!'
     }
 }
 
@@ -22,4 +22,10 @@ export function ValidatePassword(value) {
               Include at least one capital letter.<br>
               Include at least one special character.`
     }          
+}
+
+export function ValidatePasswordAndConfirmPassword(password, confirmPassword) {
+    if (password != confirmPassword){
+        return 'The Password and Confirm Password must be equal'
+    }
 }

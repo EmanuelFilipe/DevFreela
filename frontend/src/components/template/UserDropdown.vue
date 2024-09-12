@@ -8,7 +8,7 @@
             <i style="color: black" class="fa fa-angle-down"></i>
         </div>
         <div class="user-dropdown-content">
-            <router-link to="/admin" v-if="user.admin">
+            <router-link to="/admin" v-if="user.isAdmin">
                 <i class="fa fa-cogs"></i>Administration
             </router-link>
             <a href @click.prevent="logout">

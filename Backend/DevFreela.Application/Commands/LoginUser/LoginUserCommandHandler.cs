@@ -26,7 +26,9 @@ namespace DevFreela.Application.Commands.LoginUser
 
             var token = _authService.GenerateJwtToken(user.Email, user.Role);
 
-            var loginUserViewModel = new LoginUserViewModel(user.FullName, user.Email, token);
+            var loginUserViewModel = new LoginUserViewModel(user.FullName, user.Email, 
+                                                            (!string.IsNullOrEmpty(user.Role) && user.Role  == "admin" ? true : false), 
+                                                            token);
 
             return loginUserViewModel;
         }

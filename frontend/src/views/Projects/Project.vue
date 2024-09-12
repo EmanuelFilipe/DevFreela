@@ -4,19 +4,20 @@
     <b-form @submit="onSubmit">
       <b-row class="mt-3">
         <b-col md="6" sm="12">
-          <b-form-group label="Name:" label-for="project-name">
-            <b-form-input
-              id="input-project-name"
-              v-model="project.title"
-              placeholder="Enter name project"
-              required
-            ></b-form-input>
+          <b-form-group>
+              <LabelInput :name="'Name:'" />
+              <b-form-input
+                id="input-project-name"
+                v-model="project.title"
+                placeholder="Enter name project"
+                required
+              ></b-form-input>
           </b-form-group>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <b-form-group label="Description:" label-for="project-description">
+            <LabelInput :name="'Description:'" /> 
             <b-form-textarea
               id="textarea"
               v-model="project.description"
@@ -24,34 +25,31 @@
               rows="3"
               max-rows="6"
             ></b-form-textarea>
-          </b-form-group>
         </b-col>
       </b-row>
       <b-row>
         <b-col md="6" sm="12">
-          <b-form-group label="Client:" label-for="project-client">
+            <LabelInput :name="'Client:'" /> 
             <b-form-select
               id="select-project-client"
               v-model="selectedClient"
               :options="clients"
               required
             ></b-form-select>
-          </b-form-group>
         </b-col>
         <b-col md="6" sm="12">
-          <b-form-group label="Freelancers:" label-for="project-freelancer">
+            <LabelInput :name="'Freelancers:'" /> 
             <b-form-select
               id="select-project-freelancer"
               v-model="selectedFreelancer"
               :options="freelancers"
               required
             ></b-form-select>
-          </b-form-group>
         </b-col>
       </b-row>
       <b-row>
         <b-col md="6" sm="12">
-          <b-form-group label="Total Cost:" label-for="project-totalCost">
+            <LabelInput :name="'Total Cost:'" /> 
             <b-form-input
               id="project-totalCost"
               type="number"
@@ -61,10 +59,9 @@
               min="0"
               @blur="preventNegative"
             />
-          </b-form-group>
         </b-col>
         <b-col md="6" sm="12">
-          <b-form-group label="Status:" label-for="project-status">
+          <LabelInput :name="'Status:'" :mandatory-icon="false" /> 
             <b-form-select
               id="select-project-status"
               v-model="selectedStatus"
@@ -72,7 +69,6 @@
               required
               :disabled="true"
             ></b-form-select>
-          </b-form-group>
         </b-col>
       </b-row>
       <hr />
@@ -88,9 +84,10 @@
 
 <script>
 import { showError } from "@/global";
-
+import LabelInput from "@/components/template/LabelInput.vue";
 export default {
   name: "Project",
+  components: { LabelInput },
   data() {
     return {
       action: "",
@@ -118,7 +115,7 @@ export default {
       const method = this.action === "create" ? "post" : "put";
       let url = "";
 
-      if (method === "create") url = "/projects";
+      if (method === "post") url = "/projects";
       else url = `/projects/${this.id}`;
 
       this.$http[method](url, this.project)

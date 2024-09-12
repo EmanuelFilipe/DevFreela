@@ -160,14 +160,25 @@ export default {
             query: '', // Filtro opcional para a busca
             selectedId: null,
             fields: [
-                { key: 'title', label: 'Title', sortable: true },
-                { key: 'createdAt', label: 'Created At', sortable: true,
-                    thStyle: { width: '15%' },
-                    tdStyle: { width: '15%' }
+                { key: 'title', label: 'Title', sortable: true, 
+                    thStyle: { width: '28%' },
+                    tdStyle: { width: '28%' }
+                },
+                { key: 'fullNameClient', label: 'Name Client', sortable: true,
+                    thStyle: { width: '20%' },
+                    tdStyle: { width: '20%' }
+                },
+                { key: 'fullNameFreelancer', label: 'Name Freelancer', sortable: true,
+                    thStyle: { width: '20%' },
+                    tdStyle: { width: '20%' }
+                },
+                { key: 'status', label: 'Status', sortable: true,
+                    thStyle: { width: '10%' },
+                    tdStyle: { width: '10%' }
                 },
                 { key: "actions", label: "Actions", 
-                    thStyle: { width: '22%' },
-                    tdStyle: { width: '22%' }
+                    thStyle: { width: '12%' },
+                    tdStyle: { width: '12%' }
                 },
             ]
         }

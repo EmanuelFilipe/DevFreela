@@ -40,7 +40,6 @@ export default {
         this.$router.push({ name: "auth" });
         return;
       }
-
       if (userData) {
         this.$store.commit('setUser', userData)
       } else {

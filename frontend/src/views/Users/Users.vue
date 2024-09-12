@@ -211,7 +211,7 @@ export default {
       this.$http
         .get("/users")
         .then((res) => {
-          this.users = res.data;
+          this.users = res.data
           this.totalRows = this.users.length;
         })
         .catch((er) => {

@@ -18,7 +18,7 @@ namespace DevFreela.Application.Commands.User.EditUser
 
         public async Task<Unit> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
-            var passwordHash = _authService.ComputeSha256Hash(request.Password);
+            //var passwordHash = _authService.ComputeSha256Hash(request.Password);
             //var user = new Core.Entities.User(request.FullName, request.Email, request.BirthDate, passwordHash, request.Role);
             var user = await _userRepository.GetByIdAsync(request.Id);
 

@@ -18,7 +18,7 @@ namespace DevFreela.API.Controllers;
 //[Authorize]
 public class ProjectsController : ControllerBase
 {
-    private readonly OpeningTimeOption _option;
+    //private readonly OpeningTimeOption _option;
     private readonly IMediator _mediator;
     //public ProjectsController(IOptions<OpeningTimeOption> option)
     //{
@@ -61,7 +61,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    [Authorize(Roles = "client")]
+    //[Authorize(Roles = "client")]
     public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
     {
         await _mediator.Send(command);

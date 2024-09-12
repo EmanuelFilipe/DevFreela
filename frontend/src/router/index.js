@@ -2,10 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Auth from '@/views/Auth/Auth.vue'
+import AdminPages from '@/components/admin/AdminPages.vue'
 import Users from '@/views/Users/Users.vue'
 import User from '@/views/Users/User.vue'
 import Projects from '@/views/Projects/Projects.vue'
 import Project from '@/views/Projects/Project.vue'
+import { userKey } from '@/global'
 
 Vue.use(VueRouter)
 
@@ -14,6 +16,12 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: "/admin",
+    name: "adminPages",
+    component: AdminPages,
+    meta: { requiresAdmin: true }
   },
   {
     path: '/users',
@@ -55,6 +63,16 @@ const router = new VueRouter({
   mode: 'history',
   //base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const json = localStorage.getItem(userKey)
+  if(to.matched.some(record => record.meta.requiresAdmin)) {
+      const user = JSON.parse(json)
+      user && user.isAdmin ? next() : next({ path: '/' })
+  } else {
+      next()
+  }
 })
 
 export default router

@@ -3,7 +3,7 @@
     <router-link
       :to="url"
       tag="a"
-      class="text-right btn-lg btn btn-outline-primary fa fa-plus"
+      class="text-right btn-lg btn btn-outline-primary fa fa-plus "
     >
       <strong> New</strong>
     </router-link>
@@ -16,3 +16,10 @@ export default {
   props: ['url']
 };
 </script>
+
+<style scoped>
+a {
+  font-size: 22px;
+  font-weight: bold;
+}
+</style>

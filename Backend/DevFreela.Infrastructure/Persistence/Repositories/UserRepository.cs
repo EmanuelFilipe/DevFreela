@@ -41,7 +41,8 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             {
                 sqlConnection.Open();
                 var script = "SELECT Id, FullName, Email , BirthDate, Role, Active " +
-                             "  FROM Users";
+                             "  FROM Users " +
+                             " Order by Id desc";
                 var users = await sqlConnection.QueryAsync<UserDTO>(script);
 
                 return users.ToList();
