@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevFreela.Application.Commands.FinishProject
+namespace DevFreela.Application.Commands.Project.FinishProject
 {
     public class FinishProjectCommand : IRequest<bool>
     {

@@ -28,7 +28,7 @@ namespace DevFreela.Application.Commands.LoginUser
 
             var loginUserViewModel = new LoginUserViewModel(user.FullName, user.Email, 
                                                             (!string.IsNullOrEmpty(user.Role) && user.Role  == "admin" ? true : false), 
-                                                            token);
+                                                            token, user.Role);
 
             return loginUserViewModel;
         }

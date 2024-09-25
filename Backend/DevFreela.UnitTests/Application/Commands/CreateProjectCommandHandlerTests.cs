@@ -1,4 +1,4 @@
-﻿using DevFreela.Application.Commands.CreateProject;
+﻿using DevFreela.Application.Commands.Project.CreateProject;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using DevFreela.Infrastructure.Persistence;

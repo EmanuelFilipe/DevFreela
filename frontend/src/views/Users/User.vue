@@ -52,7 +52,7 @@
               id="user-birthDate"
               type="date"
               v-model="formattedBirthDate"
-              @blur="testDate"
+              :max="maxDate"
             >
             </b-form-input>
         </b-col>
@@ -99,6 +99,7 @@ export default {
       id: this.$route.params.id,
       birthDateFormated: '',
       user: {},
+      maxDate: this.getTodayDate(),
       selectedRole: null,
       roles: [
         { text: '-- Please select an option --', value: null },
@@ -186,7 +187,14 @@ export default {
       if (new Date(this.user.birthDate).toLocaleDateString() > new Date().toLocaleDateString()){
         this.formattedBirthDate = new Date().toLocaleDateString()
       }
-    }
+    },
+    getTodayDate() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    },
   },
   created() {
     this.action = this.$route?.params?.id ? "edit" : "create";

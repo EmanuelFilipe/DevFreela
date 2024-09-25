@@ -1,4 +1,4 @@
-﻿using DevFreela.Application.Commands.DeleteProject;
+﻿using DevFreela.Application.Commands.Project.DeleteProject;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Moq;

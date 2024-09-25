@@ -1,8 +1,7 @@
-﻿using DevFreela.Core.Entities;
-using DevFreela.Infrastructure.Persistence;
+﻿using DevFreela.Infrastructure.Persistence;
 using MediatR;
 
-namespace DevFreela.Application.Commands.CreateProject
+namespace DevFreela.Application.Commands.Project.CreateProject
 {
     public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, int>
     {
@@ -15,7 +14,7 @@ namespace DevFreela.Application.Commands.CreateProject
 
         public async Task<int> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = new Project(request.Title, request.Description, request.IdClient, request.IdFreelancer, request.TotalCost);
+            var project = new Core.Entities.Project(request.Title, request.Description, request.IdClient, request.IdFreelancer, request.TotalCost);
 
             await _unitOfWork.BeginTransactionAsync();
 

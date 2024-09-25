@@ -1,6 +1,4 @@
 ﻿using DevFreela.Core.Enums;
-using System;
-using System.Collections.Generic;
 
 namespace DevFreela.Core.Entities
 {

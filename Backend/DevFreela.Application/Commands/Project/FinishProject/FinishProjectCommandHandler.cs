@@ -3,7 +3,7 @@ using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
 using MediatR;
 
-namespace DevFreela.Application.Commands.FinishProject
+namespace DevFreela.Application.Commands.Project.FinishProject
 {
     public class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, bool>
     {

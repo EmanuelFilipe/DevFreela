@@ -67,7 +67,7 @@
               v-model="selectedStatus"
               :options="status"
               required
-              :disabled="true"
+              :disabled="this.action === 'create'"
             ></b-form-select>
         </b-col>
       </b-row>

@@ -1,10 +1,9 @@
-using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateComment;
-using DevFreela.Application.Commands.CreateProject;
-using DevFreela.Application.Commands.DeleteProject;
-using DevFreela.Application.Commands.FinishProject;
-using DevFreela.Application.Commands.StartProject;
-using DevFreela.Application.Commands.UpdateProject;
+using DevFreela.Application.Commands.Project.DeleteProject;
+using DevFreela.Application.Commands.Project.CreateProject;
+using DevFreela.Application.Commands.Project.FinishProject;
+using DevFreela.Application.Commands.Project.UpdateProject;
+using DevFreela.Application.Commands.Project.StartProject;
 using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Application.Queries.GetProjectById;
 using MediatR;

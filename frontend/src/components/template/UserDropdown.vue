@@ -8,6 +8,8 @@
             <i style="color: black" class="fa fa-angle-down"></i>
         </div>
         <div class="user-dropdown-content">
+            <span class="d-none d-sm-block"><strong>Role: </strong>{{ user.role }}</span>
+            <hr />
             <router-link to="/admin" v-if="user.isAdmin">
                 <i class="fa fa-cogs"></i>Administration
             </router-link>
