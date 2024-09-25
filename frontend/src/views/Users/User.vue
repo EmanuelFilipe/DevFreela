@@ -26,6 +26,7 @@
       <b-row v-if="action === 'create'">
         <b-col md="6" sm="12">
           <LabelInput :name="'Password:'" :mandatoryIcon="action === 'create'" />
+          <b-input-group>
             <b-form-input
               id="user-password"
               type="password"
@@ -33,6 +34,15 @@
               :required="action === 'create'"
               placeholder="Enter User Password..."
             />
+            <b-input-group-append>
+              <b-icon
+                icon="info-circle"
+                variant="primary"
+                class="ml-2 mt-2"
+                v-b-tooltip.hover.html="tipData"
+              ></b-icon>
+            </b-input-group-append>
+          </b-input-group>
         </b-col>
         <b-col md="6" sm="12">
           <LabelInput :name="'Confirm Password:'" :mandatoryIcon="action === 'create'" />
@@ -42,17 +52,19 @@
               v-model="user.confirmPassword"
               :required="action === 'create'"
               placeholder="Confirm User Password..."
-            />
+              />
+              <!-- :state="user.confirmPassword == user.password" -->
         </b-col>
       </b-row>
       <b-row>
         <b-col md="2" sm="12">
-            <LabelInput :name="'Birth Date:'" :mandatoryIcon="false" />
+            <LabelInput :name="'Birth Date:'" />
             <b-form-input
               id="user-birthDate"
               type="date"
               v-model="formattedBirthDate"
               :max="maxDate"
+              required
             >
             </b-form-input>
         </b-col>
@@ -76,7 +88,6 @@
             ></b-form-select>
         </b-col>
       </b-row>
-
       <hr />
       <b-button type="submit" variant="primary mr-2" id="btn-save">Submit</b-button>
       <b-button @click="cancel" variant="secondary" id="btn-cancel">Cancel</b-button>
@@ -95,6 +106,7 @@ export default {
   components: { LabelInput },
   data() {
     return {
+      tipData: { title: 'Password must have 8 characters. <br>Include at least one number. <br>Include at least one lowercase letter. <br>Include at least one capital letter.<br>Include at least one special character.'},
       action: "",
       id: this.$route.params.id,
       birthDateFormated: '',
@@ -214,5 +226,9 @@ export default {
 <style scoped>
 button {
   color: #fff;
+}
+.tooltip .tooltip-inner{
+  max-width: 500px !important;
+  width: 400px !important;
 }
 </style>
