@@ -144,7 +144,6 @@
 <script>
 import ButtonCreate from '@/components/template/ButtonCreate.vue';
 import { showError } from '@/global';
-
 export default {
     name: 'Projects',
     components: {
@@ -248,8 +247,9 @@ export default {
     },
     created() {
         this.loadProjects();
-    }
-}
+
+    },
+  }
 </script>
 
 

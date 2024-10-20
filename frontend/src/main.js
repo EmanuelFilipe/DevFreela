@@ -32,9 +32,13 @@ Vue.filter('formatDateTime', function(value) {
   return `${formattedDate} ${formattedTime}`
 })
 
-new Vue({
+const app = new Vue({
   router,
   store,
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
+Vue.prototype.$app = app;
+
+export { app };

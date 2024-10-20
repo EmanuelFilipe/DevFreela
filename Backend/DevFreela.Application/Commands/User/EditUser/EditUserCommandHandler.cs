@@ -1,5 +1,4 @@
-﻿using DevFreela.Core.Entities;
-using DevFreela.Core.Repositories;
+﻿using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
 using MediatR;
 
@@ -18,12 +17,13 @@ namespace DevFreela.Application.Commands.User.EditUser
 
         public async Task<Unit> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
-            //var passwordHash = _authService.ComputeSha256Hash(request.Password);
-            //var user = new Core.Entities.User(request.FullName, request.Email, request.BirthDate, passwordHash, request.Role);
             var user = await _userRepository.GetByIdAsync(request.Id);
 
-            user.Update(request.Id, request.FullName, request.Email, 
-                        request.BirthDate, request.Role, request.Active);
+            if (!string.IsNullOrEmpty(request.Password))
+                user.Password = _authService.ComputeSha256Hash(request.Password);
+
+            user.Update(request.Id, request.FullName, request.Email, request.BirthDate, 
+                        request.Role, request.Active, user.Password);
 
             await _userRepository.SaveChangesAsync();
 

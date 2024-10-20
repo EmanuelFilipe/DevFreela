@@ -77,7 +77,7 @@ namespace DevFreela.API.Controllers
         {
             var loginUserViewModel = await _mediator.Send(command);
 
-            if (loginUserViewModel is null) return BadRequest();
+            if (loginUserViewModel is null) return NotFound();
 
             return Ok(loginUserViewModel);
         }

@@ -27,7 +27,8 @@ namespace DevFreela.Core.Entities
         public List<Project> FreelanceProjects { get; private set; } = [];
         public List<ProjectComment> Comments { get; private set; }
 
-        public void Update(int id, string fullName, string email, DateTime bithDate, string role, bool active)
+        public void Update(int id, string fullName, string email, DateTime bithDate, 
+                           string role, bool active, string password)
         {
             Id = id;
             FullName = fullName;
@@ -35,6 +36,7 @@ namespace DevFreela.Core.Entities
             BirthDate = bithDate;
             Role = role;
             Active = active;
+            Password = password;
         }
 
         public void Delete()

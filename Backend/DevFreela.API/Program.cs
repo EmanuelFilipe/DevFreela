@@ -1,6 +1,7 @@
 using DevFreela.API.Filters;
 using DevFreela.API.Models;
 using DevFreela.Application.Commands.Project.CreateProject;
+using DevFreela.Application.Consumers;
 using DevFreela.Application.Validators.Project;
 using DevFreela.Infrastructure;
 using FluentValidation;
@@ -18,9 +19,10 @@ builder.Services.Configure<OpeningTimeOption>
 
 // para comunicação com Microsserviço
 builder.Services.AddHttpClient();
-//builder.Services.AddHostedService<PaymentApprovedConsumer>();
+builder.Services.AddHostedService<PaymentApprovedConsumer>();
 
 builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
+//builder.Services.AddScoped<CustomAuthorizeFilter>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProjectCommandValidator>();

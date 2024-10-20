@@ -46,7 +46,6 @@ namespace DevFreela.Infrastructure.Services.Auth
             var claims = new List<Claim>
             {
                 new Claim("userName", email),
-                // will be admin or client
                 new Claim(ClaimTypes.Role, role)
             };
 

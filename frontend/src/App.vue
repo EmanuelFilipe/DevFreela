@@ -8,19 +8,21 @@
         </transition>
       </v-container>
     </v-main>
+    <Footer />
   </v-app>
 </template>
 
 <script>
 /* eslint-disable */
 import Header from "./components/template/Header.vue";
+import Footer from "./components/template/Footer.vue";
 import { userKey } from "@/global";
 import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
   name: "App",
-  components: { Header },
+  components: { Header, Footer },
   data: function() {
 		return {
 			validatingToken: true
@@ -93,8 +95,12 @@ export default {
 }
 
 .pagination {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+body {
+  padding-bottom: 0px;
+}
 </style>

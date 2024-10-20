@@ -23,7 +23,7 @@
             ></b-form-input>
         </b-col>
       </b-row>
-      <b-row v-if="action === 'create'">
+      <b-row>
         <b-col md="6" sm="12">
           <LabelInput :name="'Password:'" :mandatoryIcon="action === 'create'" />
           <b-input-group>
@@ -88,6 +88,33 @@
             ></b-form-select>
         </b-col>
       </b-row>
+      <!-- <b-row v-if="action === 'create'">
+        <b-col md="6" sm="12">
+          <b-form-group label="Password:" label-for="user-password">
+            <b-form-input
+              id="user-password"
+              type="password"
+              v-model="user.password"
+              required
+              placeholder="Enter User Password..."
+            />
+          </b-form-group>
+        </b-col>
+        <b-col md="6" sm="12">
+          <b-form-group
+            label="Confirm Password:"
+            label-for="user-confirm-password"
+          >
+            <b-form-input
+              id="user-confirm-password"
+              type="password"
+              v-model="user.confirmPassword"
+              required
+              placeholder="Confirm User Password..."
+            />
+          </b-form-group>
+        </b-col>
+      </b-row> -->
       <hr />
       <b-button type="submit" variant="primary mr-2" id="btn-save">Submit</b-button>
       <b-button @click="cancel" variant="secondary" id="btn-cancel">Cancel</b-button>
@@ -98,7 +125,7 @@
   <script>
 import { showError } from '@/global';
 import { mapGetters } from 'vuex';
-import {  validateEmptyAndEmail, ValidatePassword, ValidatePasswordAndConfirmPassword } from "@/utils/validators";
+import {  validateEmptyAndEmail, ValidatePassword, ValidateConfirmPassword, ValidatePasswordAndConfirmPassword } from "@/utils/validators";
 import LabelInput from '@/components/template/LabelInput.vue';
 
 export default {
@@ -140,7 +167,7 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      if (this.action === 'create') {
+      if (this.action === 'create' || (this.user.password != null)) {
         const resultValidation = this.validationPassword()
         if (resultValidation) this.saveUser()
       } else this.saveUser()
@@ -158,7 +185,7 @@ export default {
         return false
       }
 
-      const resultConfirmPassword = ValidatePassword(this.user.confirmPassword)
+      const resultConfirmPassword = ValidateConfirmPassword(this.user.password, this.user.confirmPassword)
       if (resultConfirmPassword) {
         this.$toasted.global.defaultError({ msg: resultConfirmPassword })
         return false

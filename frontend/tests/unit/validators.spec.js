@@ -6,7 +6,7 @@ describe('validators utils', () => {
     })
 
     it('should give me a invalid email message error', () => {
-        expect(validateEmptyAndEmail('123')).toBe('This field must be a valid e-mail!')
+        expect(validateEmptyAndEmail('123')).toBe('E-mail field must be a valid e-mail!')
     })
 
     it('not should give me any message error when call validation email function', () => {

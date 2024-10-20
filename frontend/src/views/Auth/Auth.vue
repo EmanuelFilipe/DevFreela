@@ -74,7 +74,13 @@ export default {
           this.$router.push({ path: "/" });
         })
         .catch(error => {
-            this.$toasted.global.defaultError({ msg: error?.message || '' })
+          let errorMessage = ''
+          if (error.response && error.response.status === 404) {
+            errorMessage = 'User not found. Please check your credentials and try again.'
+          } else {
+            errorMessage = 'An unexpected error occurred. Please try again later.'
+          }
+            this.$toasted.global.defaultError({ msg: errorMessage || error?.message })
         });
     },
   },

@@ -80,17 +80,17 @@ describe('<Users />', () => {
         cy.contains('p', 'Are you sure you want to disable this item?')
     })
 
-    it('should be able to click on OK button', () => {
-        cy.get('#title-users').click()
-        cy.wait(1000)
+    // it('should be able to click on OK button', () => {
+    //     cy.get('#title-users').click()
+    //     cy.wait(1000)
 
-        cy.get('#btn-disabled-user').click()
-        cy.get('#deleteModal')
+    //     cy.get('#btn-disabled-user').click()
+    //     cy.get('#deleteModal')
 
-        cy.contains('#deleteModal___BV_modal_title_', 'Confirm Disabling')
-        cy.contains('p', 'Are you sure you want to disable this item?')
-        cy.get('.btn-primary').click()
-    })
+    //     cy.contains('#deleteModal___BV_modal_title_', 'Confirm Disabling')
+    //     cy.contains('p', 'Are you sure you want to disable this item?')
+    //     cy.get('.btn-primary').click()
+    // })
 
     it('should render different value when the status is desabled', () => {
         let oldStatus

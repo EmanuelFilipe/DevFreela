@@ -6,6 +6,7 @@ body {
     /*background: linear-gradient(to right, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));*/
     /*color: #FFF;*/
     font-size: 1.8rem;
+    padding-bottom: 0px;
 }
 
 h1, h2, h3 {
