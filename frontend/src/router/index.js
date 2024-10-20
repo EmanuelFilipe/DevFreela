@@ -7,6 +7,7 @@ import Users from '@/views/Users/Users.vue'
 import User from '@/views/Users/User.vue'
 import Projects from '@/views/Projects/Projects.vue'
 import Project from '@/views/Projects/Project.vue'
+import Charts from '@/views/Charts.vue'
 import { userKey } from '@/global'
 import { app } from '../main';
 
@@ -59,7 +60,13 @@ const routes = [
     name: 'auth',
     path: '/auth',
     component: Auth
-  }]
+  },
+  {
+    name: 'charts',
+    path: '/charts',
+    component: Charts
+  },
+]
 
 const router = new VueRouter({
   mode: 'history',
