@@ -9,6 +9,13 @@
       <b-row>
         <b-col>
           <ButtonCreate url="/user" />
+          <div v-if="users.length">
+            <button
+              class="btn btn-lg fa fa-file-pdf-o fa-2x"
+              @click.prevent="generatePDF"
+              title="Download PDF"
+            ></button>
+          </div>
         </b-col>
       </b-row>
       <hr />
@@ -24,6 +31,7 @@
     </b-table> -->
 
     <b-table
+      id="usersTable"
       class="table"
       hover
       striped
@@ -134,7 +142,7 @@
       @ok="confirmDisable"
       ok-title="OK"
       cancel-title="Cancelar"
-      ok-class="custom-ok-btn" 
+      ok-class="custom-ok-btn"
       cancel-class="custom-cancel-btn"
       ok-variant="primary"
       cancel-variant="danger"
@@ -153,20 +161,21 @@
       :total-rows="totalRows"
       :per-page="perPage"
       aria-controls="table-users"
-      >
+    >
     </b-pagination>
   </b-container>
-  
 </template>
 
 <script>
 import ButtonCreate from "@/components/template/ButtonCreate.vue";
 import { showError, userKey } from "@/global";
-/* eslint-disable */
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
 export default {
   name: "Users",
   components: {
-    ButtonCreate
+    ButtonCreate,
   },
   data() {
     return {
@@ -176,25 +185,33 @@ export default {
       isBusy: false,
       fields: [
         { key: "fullName", label: "Full Name", sortable: true },
-        { key: "birthDate", label: "Birth Date", sortable: true,
-          thStyle: { width: '15%' },
-          tdStyle: { width: '15%' }
-         },
+        {
+          key: "birthDate",
+          label: "Birth Date",
+          sortable: true,
+          thStyle: { width: "15%" },
+          tdStyle: { width: "15%" },
+        },
         {
           key: "active",
           label: "Active",
           sortable: true,
           formatter: (value) => (value ? "Yes" : "No"),
-          thStyle: { width: '15%' },
-          tdStyle: { width: '15%' }
+          thStyle: { width: "15%" },
+          tdStyle: { width: "15%" },
         },
-        { key: "role", label: "Role", sortable: true,
-          thStyle: { width: '15%' },
-          tdStyle: { width: '15%' }
+        {
+          key: "role",
+          label: "Role",
+          sortable: true,
+          thStyle: { width: "15%" },
+          tdStyle: { width: "15%" },
         },
-        { key: "actions", label: "Actions", 
-          thStyle: { width: '15%' },
-          tdStyle: { width: '15%' }
+        {
+          key: "actions",
+          label: "Actions",
+          thStyle: { width: "15%" },
+          tdStyle: { width: "15%" },
         },
       ],
       users: [],
@@ -211,19 +228,19 @@ export default {
       this.$http
         .get("/users")
         .then((res) => {
-          this.users = res.data
+          this.users = res.data;
           this.totalRows = this.users.length;
         })
         .catch((er) => {
-          console.error('erro chamada user', er)
+          console.error("erro chamada user", er);
           if (er.response && er.response.status === 401) {
             // Exibe uma mensagem de erro
             alert("Session expired. Please login again.");
 
             // Redireciona para a tela de login
-            localStorage.removeItem(userKey)
-            this.$store.commit('setUser', null)
-            this.$router.push({ path: '/auth'})
+            localStorage.removeItem(userKey);
+            this.$store.commit("setUser", null);
+            this.$router.push({ path: "/auth" });
           } else {
             // Exibe outros erros, se houver
             alert("Ocorreu um erro ao carregar os usuários.");
@@ -235,11 +252,6 @@ export default {
         name: "user-edit",
         params: { id },
       });
-    },
-    filteredItem(item) {
-      // Retorna um novo objeto sem o campo '_showDetails'
-      const { _showDetails, ...filteredItem } = item;
-      return filteredItem;
     },
     info(item, index, button) {
       this.infoModal.title = `Row index: ${index}`;
@@ -266,16 +278,77 @@ export default {
           })
           .catch(showError);
     },
-    // toggleBusy() {
-    //     this.isBusy = true
-    //   },
+
+    generatePDF() {
+      const pdf = new jsPDF({ orientation: "landscape" });
+      const columns = [
+        { title: "Full Name", dataKey: "fullName" },
+        { title: "Birth Date", dataKey: "birthDate" },
+        { title: "Active", dataKey: "active" },
+        { title: "Role", dataKey: "role" },
+      ];
+
+      const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-GB");
+      };
+
+      const totalPages =
+        this.totalRows > 0 ? Math.ceil(this.totalRows / this.perPage) : 1;
+      const date = new Date().toLocaleDateString();
+
+      // Adiciona o título e cabeçalho na primeira página
+      pdf.setFontSize(18);
+      pdf.text("Relatório de Usuários Cadastrados", 14, 22);
+      pdf.setFontSize(12);
+      pdf.text(`Data: ${date}`, 14, 30);
+
+      for (let i = 1; i <= totalPages; i++) {
+        this.currentPage = i;
+        const start = (i - 1) * this.perPage;
+        const end = start + this.perPage;
+        const pageData = this.totalRows > 0 ? this.users.slice(start, end) : [];
+
+        if (i > 1) {
+          pdf.addPage();
+          pdf.setFontSize(18);
+          pdf.text("Relatório de Usuários Cadastrados", 14, 22);
+          pdf.setFontSize(12);
+          pdf.text(`Data: ${date}`, 14, 30);
+        }
+
+        pdf.autoTable({
+          head: [columns.map((col) => col.title)],
+          body: pageData.map((row) => [
+            row.fullName,
+            formatDate(row.birthDate),
+            row.active ? "Yes" : "No",
+            row.role,
+          ]),
+          startY: 50,
+          theme: "grid",
+          headStyles: { fillColor: [0, 0, 0] },
+          styles: { fontSize: 10 },
+        });
+
+        // Adiciona o número da página no rodapé
+        pdf.text(
+          `Página ${i} de ${totalPages}`,
+          pdf.internal.pageSize.width / 2,
+          pdf.internal.pageSize.height - 10,
+          { align: "center" }
+        );
+      }
+
+      pdf.save("users.pdf");
+    },
   },
   computed: {
     paginatedItems() {
-      const start = (this.currentPage - 1) * this.perPage
-      const end = this.currentPage * this.perPage
-      return this.users.slice(start, end)
-    }
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = this.currentPage * this.perPage;
+      return this.users.slice(start, end);
+    },
   },
   mounted() {
     this.loadUsers();
@@ -329,8 +402,7 @@ ul {
   color: #555;
 }
 .custom-cancel-btn,
-.custom-ok-btn  {
+.custom-ok-btn {
   color: white;
 }
-
 </style>

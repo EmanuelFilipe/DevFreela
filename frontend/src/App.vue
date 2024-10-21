@@ -1,10 +1,13 @@
 <template>
   <v-app>
     <Header />
-    <v-main class="main">
+    <!-- <SideBar /> -->
+    <v-main class="main" >
       <v-container class="mt-6" >
         <transition name="slide" mode="out-in">
-          <router-view />
+          <div :style="{'margin-left:': sidebarWidth}">
+            <router-view />
+          </div>
         </transition>
       </v-container>
     </v-main>
@@ -16,6 +19,8 @@
 /* eslint-disable */
 import Header from "./components/template/Header.vue";
 import Footer from "./components/template/Footer.vue";
+// import SideBar from "./components/template/sidebar/SideBar.vue";
+import { sidebarWidth } from "./store/state";
 import { userKey } from "@/global";
 import axios from "axios";
 import { mapState } from "vuex";
@@ -25,7 +30,8 @@ export default {
   components: { Header, Footer },
   data: function() {
 		return {
-			validatingToken: true
+			validatingToken: true,
+      sidebarWidth
 		}
 	},
   methods: {

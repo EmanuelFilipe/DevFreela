@@ -90,6 +90,9 @@ entrar com usuario/senha: **guest**
 - foi feito com Vue.js 2
 - using vue-router, vuex (para gerenciamento de estado), axios, unity test, test e2e, vuetify, bootstrap-vue, vue-toasted
 
+## font-awesome
+https://fontawesome.com/v4/icons/
+
 ### Project setup
 ```
 npm install
