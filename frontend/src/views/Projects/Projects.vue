@@ -1,13 +1,13 @@
 <template>
     <b-container fluid>
         <b-form>
-            <b-row>
+            <b-row class="mb-5">
                 <b-col>
-                    <h1 class="display-2">Projects</h1>
+                    <h1 class="display-3"><strong>Projects</strong></h1>
                 </b-col>
             </b-row>
             <b-row>
-                <b-col sm="6" md="4">
+                <b-col sm="6" md="4" class="mt-1">
                     <b-form-input
                         id="input-filter"
                         v-model="query"

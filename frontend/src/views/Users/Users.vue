@@ -1,23 +1,71 @@
 <template>
   <b-container fluid>
     <b-form>
-      <b-row>
+      <b-row class="mb-5">
         <b-col>
-          <h1 class="display-2">Users</h1>
+          <h1 class="display-3"><strong>Users</strong></h1>
         </b-col>
       </b-row>
       <b-row>
-        <b-col>
-          <ButtonCreate url="/user" />
-          <div v-if="users.length">
+        <!-- <b-col style="padding: 0; margin: 0px;">
+          <div >
             <button
               class="btn btn-lg fa fa-file-pdf-o fa-2x"
               @click.prevent="generatePDF"
               title="Download PDF"
-            ></button>
+            ><span class="buttons-report"><br><strong>PDF</strong></span></button>
+            <button 
+              class="btn btn-lg fa fa-file-excel-o fa-2x" 
+              @click.prevent="generateExcel" 
+              title="Download Excel"
+            ><span class="buttons-report"><br><strong>Excel</strong></span>
+            </button>
+          </div>
+        </b-col> -->
+        <b-col>
+          <div class="mt-1">
+            <b-button variant="info" style="color: white;" v-b-modal.export-modal>Exportar Relatório</b-button>
+            <b-modal id="export-modal" title="Escolha o formato" hide-footer >
+              <div class="text-center">
+                <button
+                class="btn btn-lg fa fa-file-pdf-o fa-2x btn-pdf"
+                @click.prevent="generatePDF"
+                title="Download PDF"
+                ><span class="buttons-report" style="color: black;"><br><strong>PDF</strong></span></button>
+                <button 
+                class="btn btn-lg fa fa-file-excel-o fa-2x btn-excel" 
+                @click.prevent="generateExcel" 
+                title="Download Excel"
+                ><span class="buttons-report" style="color: black;"><br><strong>Excel</strong></span>
+              </button>
+            </div>
+            </b-modal>
           </div>
         </b-col>
+        <b-col>
+          <ButtonCreate url="/user" />
+        </b-col>
       </b-row>
+      <!-- <b-row>
+        <div>
+          <b-button variant="primary" v-b-modal.export-modal>Exportar Relatório</b-button>
+          <b-modal id="export-modal" title="Escolha o formato" hide-footer >
+            <div class="text-center">
+              <button
+              class="btn btn-lg fa fa-file-pdf-o fa-2x btn-pdf"
+              @click.prevent="generatePDF"
+              title="Download PDF"
+              ><span class="buttons-report" style="color: black;"><br><strong>PDF</strong></span></button>
+              <button 
+              class="btn btn-lg fa fa-file-excel-o fa-2x btn-excel" 
+              @click.prevent="generateExcel" 
+              title="Download Excel"
+              ><span class="buttons-report" style="color: black;"><br><strong>Excel</strong></span>
+            </button>
+          </div>
+          </b-modal>
+        </div>
+      </b-row> -->
       <hr />
     </b-form>
 
@@ -171,6 +219,8 @@ import ButtonCreate from "@/components/template/ButtonCreate.vue";
 import { showError, userKey } from "@/global";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 export default {
   name: "Users",
@@ -221,6 +271,47 @@ export default {
         content: "",
       },
       selectedId: null,
+      json_fields: {
+        Id: "id",
+        "Full Name": "fullName",
+        "Birth Date": {
+          field: "birthDate",
+          callback: (value) => {
+            return this.$options.filters.formatDate(value);
+          },
+        },
+        "E-mail": "email",
+        Role: "role",
+        "Active?": "active",
+      },
+      json_meta: [
+        [
+          {
+            key: "charset",
+            value: "utf8",
+          },
+        ],
+      ],
+      header: [
+        "Relatório de Usuários",
+        `Gerado por: ${this.$store.state.user.name}`,
+        `Data: ${new Date().toLocaleDateString()}`,
+        `Quantidade de páginas: ${this.totalPages()}`,
+        ""
+      ],
+      footer: [
+        "Fim do Relatório"
+      ],
+      excelStyles: {
+        'thead th': {
+          'text-align': 'left', // Alinha o texto do cabeçalho à esquerda
+          'background-color': '#DFF0D8', // Cor de fundo do cabeçalho (verde claro)
+          'color': 'black' // Cor do texto do cabeçalho
+        },
+        'header': {
+          'text-align': 'left' // Alinha o texto do cabeçalho à esquerda
+        }
+      }
     };
   },
   methods: {
@@ -293,8 +384,7 @@ export default {
         return date.toLocaleDateString("en-GB");
       };
 
-      const totalPages =
-        this.totalRows > 0 ? Math.ceil(this.totalRows / this.perPage) : 1;
+      const totalPages = this.totalPages()
       const date = new Date().toLocaleDateString();
 
       // Adiciona o título e cabeçalho na primeira página
@@ -341,7 +431,61 @@ export default {
       }
 
       pdf.save("users.pdf");
+      this.$bvModal.hide('export-modal');
     },
+    async fetchData() {
+      return this.users;
+    },
+    totalPages() {
+      return this.totalRows > 0 ? Math.ceil(this.totalRows / this.perPage) : 1;
+    },
+    async generateExcel() {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Relatório');
+
+      // Adiciona o título
+      worksheet.mergeCells('A1', 'F1');
+      const titleCell = worksheet.getCell('A1');
+      titleCell.value = 'Relatório de Usuários';
+      titleCell.font = { size: 20, bold: true };
+      titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+      // Adiciona informações adicionais
+      worksheet.addRow([`Gerado por: ${this.$store.state.user.name}`]);
+      worksheet.addRow([`Data: ${new Date().toLocaleDateString()}`]);
+      worksheet.addRow([`Quantidade de itens: ${this.users.length}`]);
+      worksheet.addRow([]); // Linha em branco
+
+      // Adiciona cabeçalho do grid
+      const headerRow = worksheet.addRow(['Id', 'Full Name', 'Birth Date', 'E-mail', 'Role', 'Active?']);
+      headerRow.eachCell((cell) => {
+        cell.font = { bold: true };
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'DFF0D8' }
+        };
+      });
+
+      // Adiciona dados
+      this.users.forEach((item) => {
+        worksheet.addRow([item.id, item.fullName, this.$options.filters.formatDate(item.birthDate), item.email, item.role, (item.active ? 'Yes' : 'No')]);
+      });
+
+      // Define a largura das colunas individualmente
+      worksheet.getColumn(1).width = 5;  // Id
+      worksheet.getColumn(2).width = 30; // Full Name
+      worksheet.getColumn(3).width = 13; // Birth Date
+      worksheet.getColumn(4).width = 35; // E-mail
+      worksheet.getColumn(5).width = 15; // Role
+      worksheet.getColumn(6).width = 10; // Active?
+
+      // Salva o arquivo
+      const buffer = await workbook.xlsx.writeBuffer();
+      saveAs(new Blob([buffer]), 'relatorio_usuarios.xlsx');
+
+      this.$bvModal.hide('export-modal');
+    }
   },
   computed: {
     paginatedItems() {
@@ -405,4 +549,21 @@ ul {
 .custom-ok-btn {
   color: white;
 }
+
+.buttons-report {
+  font-size: 20px;
+}
+
+#deleteModal > .btn {
+  color: white !important;
+}
+
+.btn-pdf {
+color: #FA0F00;
+}
+
+.btn-excel {
+  color: #10793f;
+}
+
 </style>
