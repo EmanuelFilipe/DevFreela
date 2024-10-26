@@ -15,7 +15,7 @@ namespace DevFreela.Application.Queries.User.GetAllUsers
 
         public async Task<List<UserDTO>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var usersDTOList = await _userRepository.GetAllAsync();
+            var usersDTOList = await _userRepository.GetAllAsync(request.Email);
             return usersDTOList;
         }
     }

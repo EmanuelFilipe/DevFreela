@@ -35,14 +35,19 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
         }
 
-        public async Task<List<UserDTO>> GetAllAsync()
+        public async Task<List<UserDTO>> GetAllAsync(string email)
         {
             using (var sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
                 var script = "SELECT Id, FullName, Email , BirthDate, Role, Active " +
-                             "  FROM Users " +
-                             " Order by Id desc";
+                             "  FROM Users ";
+
+                if (!string.IsNullOrEmpty(email))
+                    script += $" WHERE Email = '{email}'";
+
+                script += " Order by Id desc";
+
                 var users = await sqlConnection.QueryAsync<UserDTO>(script);
 
                 return users.ToList();

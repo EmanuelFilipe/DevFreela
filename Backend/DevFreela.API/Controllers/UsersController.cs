@@ -35,14 +35,19 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get([FromQuery] GetAllUsersQuery command)
         {
-            var query = new GetAllUsersQuery();
-            var users = await _mediator.Send(query);
+            var users = await _mediator.Send(command);
 
             if (users is null) return NotFound();
 
             return Ok(users);
+        }
+
+        [HttpGet("bar-chart")]
+        public async Task<IActionResult> GetUsersGrouped()
+        {
+            return Ok();
         }
 
         // api/users

@@ -22,23 +22,32 @@
             </button>
           </div>
         </b-col> -->
-        <b-col>
+        <b-col v-if="users.length">
           <div class="mt-1">
-            <b-button variant="info" style="color: white;" v-b-modal.export-modal>Exportar Relatório</b-button>
-            <b-modal id="export-modal" title="Escolha o formato" hide-footer >
+            <b-button variant="info" style="color: white" v-b-modal.export-modal
+              >Download Report</b-button
+            >
+            <b-modal id="export-modal" title="Choose the format" hide-footer>
               <div class="text-center">
                 <button
-                class="btn btn-lg fa fa-file-pdf-o fa-2x btn-pdf"
-                @click.prevent="generatePDF"
-                title="Download PDF"
-                ><span class="buttons-report" style="color: black;"><br><strong>PDF</strong></span></button>
-                <button 
-                class="btn btn-lg fa fa-file-excel-o fa-2x btn-excel" 
-                @click.prevent="generateExcel" 
-                title="Download Excel"
-                ><span class="buttons-report" style="color: black;"><br><strong>Excel</strong></span>
-              </button>
-            </div>
+                  class="btn btn-lg fa fa-file-pdf-o fa-2x btn-pdf"
+                  @click.prevent="generatePDF"
+                  title="Download PDF"
+                >
+                  <span class="buttons-report" style="color: black"
+                    ><br /><strong>PDF</strong></span
+                  >
+                </button>
+                <button
+                  class="btn btn-lg fa fa-file-excel-o fa-2x btn-excel"
+                  @click.prevent="generateExcel"
+                  title="Download Excel"
+                >
+                  <span class="buttons-report" style="color: black"
+                    ><br /><strong>Excel</strong></span
+                  >
+                </button>
+              </div>
             </b-modal>
           </div>
         </b-col>
@@ -184,6 +193,20 @@
       </template>
     </b-table>
 
+    <!-- <b-modal
+      id="deleteModal"
+      title="Confirm Disabling"
+      @ok="confirmDisable"
+      ok-title="OK"
+      cancel-title="Cancelar"
+      ok-class="custom-ok-btn"
+      cancel-class="custom-cancel-btn"
+      ok-variant="primary"
+      cancel-variant="danger"
+    >
+      <p>Are you sure you want to disable this item?</p>
+    </b-modal> -->
+
     <b-modal
       id="deleteModal"
       title="Confirm Disabling"
@@ -196,6 +219,24 @@
       cancel-variant="danger"
     >
       <p>Are you sure you want to disable this item?</p>
+      <template v-slot:modal-footer="{ ok, cancel }">
+        <button
+          type="button"
+          class="btn btn-danger"
+          style="color: white"
+          @click="cancel()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="color: white"
+          @click="ok()"
+        >
+          OK
+        </button>
+      </template>
     </b-modal>
 
     <!-- Info modal -->
@@ -219,14 +260,16 @@ import ButtonCreate from "@/components/template/ButtonCreate.vue";
 import { showError, userKey } from "@/global";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import ExcelJS from 'exceljs';
-import { saveAs } from 'file-saver';
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+import utilsMixin from "@/mixin/utilsMixin";
 
 export default {
   name: "Users",
   components: {
     ButtonCreate,
   },
+  mixins: [ utilsMixin ],
   data() {
     return {
       currentPage: 1,
@@ -297,27 +340,31 @@ export default {
         `Gerado por: ${this.$store.state.user.name}`,
         `Data: ${new Date().toLocaleDateString()}`,
         `Quantidade de páginas: ${this.totalPages()}`,
-        ""
+        "",
       ],
-      footer: [
-        "Fim do Relatório"
-      ],
+      footer: ["Fim do Relatório"],
       excelStyles: {
-        'thead th': {
-          'text-align': 'left', // Alinha o texto do cabeçalho à esquerda
-          'background-color': '#DFF0D8', // Cor de fundo do cabeçalho (verde claro)
-          'color': 'black' // Cor do texto do cabeçalho
+        "thead th": {
+          "text-align": "left", // Alinha o texto do cabeçalho à esquerda
+          "background-color": "#DFF0D8", // Cor de fundo do cabeçalho (verde claro)
+          color: "black", // Cor do texto do cabeçalho
         },
-        'header': {
-          'text-align': 'left' // Alinha o texto do cabeçalho à esquerda
-        }
-      }
+        header: {
+          "text-align": "left", // Alinha o texto do cabeçalho à esquerda
+        },
+      },
     };
   },
   methods: {
     loadUsers() {
+      const params = {
+        email:
+          this.$store.state.user.role !== "admin"
+            ? this.$store.state.user.email
+            : "",
+      };
       this.$http
-        .get("/users")
+        .get("/users", { params })
         .then((res) => {
           this.users = res.data;
           this.totalRows = this.users.length;
@@ -370,122 +417,147 @@ export default {
           .catch(showError);
     },
 
-    generatePDF() {
-      const pdf = new jsPDF({ orientation: "landscape" });
-      const columns = [
-        { title: "Full Name", dataKey: "fullName" },
-        { title: "Birth Date", dataKey: "birthDate" },
-        { title: "Active", dataKey: "active" },
-        { title: "Role", dataKey: "role" },
-      ];
+    async generatePDF() {
+      try {
+        const pdf = new jsPDF({ orientation: "landscape" });
+        const columns = [
+          { title: "Full Name", dataKey: "fullName" },
+          { title: "Birth Date", dataKey: "birthDate" },
+          { title: "E-mail", dataKey: "email" },
+          { title: "Active", dataKey: "active" },
+          { title: "Role", dataKey: "role" },
+        ];
 
-      const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-GB");
-      };
+        const totalPages = this.totalPages();
+        const date = new Date();
+        const title = "Registered Users Report"
 
-      const totalPages = this.totalPages()
-      const date = new Date().toLocaleDateString();
+        // Adiciona o título e cabeçalho na primeira página
+        pdf.setFontSize(18);
+        pdf.text(title, this.calculateCenterTextPosition(pdf, title), 22);
+        pdf.setFontSize(12);
+        pdf.text(`Generate by: ${this.$store.state.user.name}`, 14, 30);
+        pdf.setFontSize(12);
+        pdf.text(`Date: ${this.getDateTime(date)}`, 14, 38);
 
-      // Adiciona o título e cabeçalho na primeira página
-      pdf.setFontSize(18);
-      pdf.text("Relatório de Usuários Cadastrados", 14, 22);
-      pdf.setFontSize(12);
-      pdf.text(`Data: ${date}`, 14, 30);
+        for (let i = 1; i <= totalPages; i++) {
+          this.currentPage = i;
+          const start = (i - 1) * this.perPage;
+          const end = start + this.perPage;
+          const pageData =
+            this.totalRows > 0 ? this.users.slice(start, end) : [];
 
-      for (let i = 1; i <= totalPages; i++) {
-        this.currentPage = i;
-        const start = (i - 1) * this.perPage;
-        const end = start + this.perPage;
-        const pageData = this.totalRows > 0 ? this.users.slice(start, end) : [];
+          if (i > 1) {
+            pdf.addPage();
+            pdf.setFontSize(18);
+            pdf.text(title, this.calculateCenterTextPosition(pdf, title), 22);
+            pdf.setFontSize(12);
+            pdf.text(`Generate by: ${this.$store.state.user.name}`, 14, 30);
+            pdf.setFontSize(12);
+            pdf.text(`Date: ${this.getDateTime(date)}`, 14, 38);
+          }
 
-        if (i > 1) {
-          pdf.addPage();
-          pdf.setFontSize(18);
-          pdf.text("Relatório de Usuários Cadastrados", 14, 22);
-          pdf.setFontSize(12);
-          pdf.text(`Data: ${date}`, 14, 30);
+          pdf.autoTable({
+            head: [columns.map((col) => col.title)],
+            body: pageData.map((row) => [
+              row.fullName,
+              this.formatDate(row.birthDate),
+              row.email,
+              row.active ? "Yes" : "No",
+              row.role,
+            ]),
+            startY: 50,
+            theme: "grid",
+            headStyles: { fillColor: [0, 0, 0] },
+            styles: { fontSize: 10 },
+          });
+
+          // Adiciona o número da página no rodapé
+          pdf.text(
+            `Page ${i} of ${totalPages}`,
+            pdf.internal.pageSize.width / 2,
+            pdf.internal.pageSize.height - 10,
+            { align: "center" }
+          );
         }
 
-        pdf.autoTable({
-          head: [columns.map((col) => col.title)],
-          body: pageData.map((row) => [
-            row.fullName,
-            formatDate(row.birthDate),
-            row.active ? "Yes" : "No",
-            row.role,
-          ]),
-          startY: 50,
-          theme: "grid",
-          headStyles: { fillColor: [0, 0, 0] },
-          styles: { fontSize: 10 },
-        });
-
-        // Adiciona o número da página no rodapé
-        pdf.text(
-          `Página ${i} de ${totalPages}`,
-          pdf.internal.pageSize.width / 2,
-          pdf.internal.pageSize.height - 10,
-          { align: "center" }
-        );
+        pdf.save("users.pdf");
+        this.dowloadCompleted()
+        this.$bvModal.hide("export-modal");
+      } catch (error) {
+        this.$toasted.global.defaultError({ msg: error });
+        console.error(error);
       }
-
-      pdf.save("users.pdf");
-      this.$bvModal.hide('export-modal');
-    },
-    async fetchData() {
-      return this.users;
     },
     totalPages() {
       return this.totalRows > 0 ? Math.ceil(this.totalRows / this.perPage) : 1;
     },
     async generateExcel() {
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('Relatório');
+      try {
+        const date = new Date()
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Report");
 
-      // Adiciona o título
-      worksheet.mergeCells('A1', 'F1');
-      const titleCell = worksheet.getCell('A1');
-      titleCell.value = 'Relatório de Usuários';
-      titleCell.font = { size: 20, bold: true };
-      titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
+        // Adiciona o título
+        worksheet.mergeCells("A1", "F1");
+        const titleCell = worksheet.getCell("A1");
+        titleCell.value = "Registered Users Report";
+        titleCell.font = { size: 20, bold: true };
+        titleCell.alignment = { vertical: "middle", horizontal: "center" };
 
-      // Adiciona informações adicionais
-      worksheet.addRow([`Gerado por: ${this.$store.state.user.name}`]);
-      worksheet.addRow([`Data: ${new Date().toLocaleDateString()}`]);
-      worksheet.addRow([`Quantidade de itens: ${this.users.length}`]);
-      worksheet.addRow([]); // Linha em branco
+        // Adiciona informações adicionais
+        worksheet.addRow([`Created by: ${this.$store.state.user.name}`]);
+        worksheet.addRow([`Date: ${this.getDateTime(date)}`]);
+        worksheet.addRow([`Amount of items: ${this.users.length}`]);
+        worksheet.addRow([]); // Linha em branco
 
-      // Adiciona cabeçalho do grid
-      const headerRow = worksheet.addRow(['Id', 'Full Name', 'Birth Date', 'E-mail', 'Role', 'Active?']);
-      headerRow.eachCell((cell) => {
-        cell.font = { bold: true };
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: 'DFF0D8' }
-        };
-      });
+        // Adiciona cabeçalho do grid
+        const headerRow = worksheet.addRow([
+          "Id",
+          "Full Name",
+          "Birth Date",
+          "E-mail",
+          "Role",
+          "Active?",
+        ]);
+        headerRow.eachCell((cell) => {
+          cell.font = { bold: true };
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "DFF0D8" },
+          };
+        });
 
-      // Adiciona dados
-      this.users.forEach((item) => {
-        worksheet.addRow([item.id, item.fullName, this.$options.filters.formatDate(item.birthDate), item.email, item.role, (item.active ? 'Yes' : 'No')]);
-      });
+        // Adiciona dados
+        this.users.forEach((item) => {
+          worksheet.addRow([
+            item.id,
+            item.fullName,
+            this.$options.filters.formatDate(item.birthDate),
+            item.email,
+            item.role,
+            item.active ? "Yes" : "No",
+          ]);
+        });
 
-      // Define a largura das colunas individualmente
-      worksheet.getColumn(1).width = 5;  // Id
-      worksheet.getColumn(2).width = 30; // Full Name
-      worksheet.getColumn(3).width = 13; // Birth Date
-      worksheet.getColumn(4).width = 35; // E-mail
-      worksheet.getColumn(5).width = 15; // Role
-      worksheet.getColumn(6).width = 10; // Active?
+        // Define a largura das colunas individualmente
+        worksheet.getColumn(1).width = 5; // Id
+        worksheet.getColumn(2).width = 30; // Full Name
+        worksheet.getColumn(3).width = 13; // Birth Date
+        worksheet.getColumn(4).width = 35; // E-mail
+        worksheet.getColumn(5).width = 15; // Role
+        worksheet.getColumn(6).width = 10; // Active?
 
-      // Salva o arquivo
-      const buffer = await workbook.xlsx.writeBuffer();
-      saveAs(new Blob([buffer]), 'relatorio_usuarios.xlsx');
-
-      this.$bvModal.hide('export-modal');
-    }
+        // Salva o arquivo
+        const buffer = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buffer]), "users_report.xlsx");
+        this.dowloadCompleted();
+        this.$bvModal.hide("export-modal");
+      } catch (error) {
+        this.$toasted.global.defaultError({ msg: error });
+      }
+    },
   },
   computed: {
     paginatedItems() {
@@ -545,25 +617,16 @@ ul {
 .details-value {
   color: #555;
 }
-.custom-cancel-btn,
-.custom-ok-btn {
-  color: white;
-}
 
 .buttons-report {
-  font-size: 20px;
-}
-
-#deleteModal > .btn {
-  color: white !important;
+  font-size: 18px;
 }
 
 .btn-pdf {
-color: #FA0F00;
+  color: #fa0f00;
 }
 
 .btn-excel {
   color: #10793f;
 }
-
 </style>

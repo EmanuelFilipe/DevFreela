@@ -2,8 +2,9 @@
 {
     public class LoginUserViewModel
     {
-        public LoginUserViewModel(string name, string email, bool isAdmin, string token, string role)
+        public LoginUserViewModel(int id, string name, string email, bool isAdmin, string token, string role)
         {
+            Id = id;
             Name = name;
             Email = email;
             IsAdmin = isAdmin;
@@ -11,6 +12,7 @@
             Role = role;
         }
 
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public bool IsAdmin { get; set; }

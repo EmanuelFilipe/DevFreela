@@ -19,8 +19,8 @@ namespace DevFreela.Application.Queries.GetAllProjects
 
             var projectsViewModel = projectPaginationResult
                 .Data
-                .Select(p => new ProjectViewModel(p.Id, p.Title, p.Client?.FullName, p.Freelancer?.FullName, 
-                                                  p.Status.ToString(), p.CreatedAt))
+                .Select(p => new ProjectViewModel(p.Id, p.Title, p.Client.Id, p.Client?.FullName, p.Freelancer.Id, 
+                                                  p.Freelancer?.FullName, p.Status.ToString(), p.CreatedAt))
                 .ToList();
 
             var paginationResult = new PaginationResult<ProjectViewModel>(

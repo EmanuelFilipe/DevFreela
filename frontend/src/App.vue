@@ -109,4 +109,9 @@ export default {
 body {
   padding-bottom: 0px;
 }
+
+.toast-info {
+  background-color: #17a2b8; /* Azul */
+  color: #fff;
+}
 </style>

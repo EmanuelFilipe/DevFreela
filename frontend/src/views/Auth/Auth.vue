@@ -1,7 +1,7 @@
 <template>
   <div class="auth-content">
     <div class="auth-modal">
-      <!-- <img src="../../assets/logo.png" alt="logo" width="200"> -->
+      <img src="../../assets/devfreela-logo.png" alt="logo" width="250">
       <hr />
       <div class="auth-title">
         Login
