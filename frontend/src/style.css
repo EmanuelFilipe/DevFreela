@@ -3,9 +3,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: ghostwhite;
-    /*background: linear-gradient(to right, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));*/
-    /*color: #FFF;*/
-    font-size: 1.8rem;
+    background: linear-gradient(to right, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));
     padding-bottom: 0px;
 }
 
@@ -16,50 +14,10 @@ h1, h2, h3 {
 }
 
 hr {
-   /* color: #fff !important;*/
+   color: #fff !important;
 }
 
-.menu ul {
-    display: flex;    
-    background-color: #777;
-    list-style: none;
-    padding: 0;
-    border-radius: 50px;
-    overflow: hidden;
-}
 
-.menu li {
-    flex: 1;
-}
-
-.menu a {
-    display: flex;
-    justify-content: center;
-    padding: 15px 40px;
-    text-decoration: none;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.menu .active {
-    background-color: #2392f0;
-}
-
-.menu .active a {
-    color: #FFF;
-}
-
-.menu a {
-    color: #FFF;
-}
-
-button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1.5rem;
-    outline: none;
-    border: 0;
-}
 
 [sucesso] {
     color: #FFF;
@@ -79,23 +37,62 @@ button {
     background-color: #2392f0aa;
 }
 
-.lista {
-    list-style: none;
-    padding: 0px;
-    border: 1px solid #FFF;
-    border-radius: 8px;
-    overflow: hidden;
-}
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 
-.lista .item-lista {
-    padding: 15px 25px;
-    cursor: pointer;
-}
+  .toast-info {
+    background-color: #17a2b8; /* Azul */
+    color: #fff;
+  }
 
-.lista .item-lista:hover {
-    background-color: #FFF3;
-}
 
-.lista .item-lista:nth-child(n + 2) {
-    border-top: 1px solid #FFF;
-}
+  .card-body {
+    padding: 20px 50px 20px 50px;
+    font-size: 14px;
+    width: 50%;
+  }
+  
+  .details-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    align-items: center;
+  }
+  
+  .details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+  }
+  
+  .details-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .details-label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .details-value {
+    color: #555;
+  }
+
+  .btn-pdf, .btn-pdf:hover {
+    color: #fa0f00;
+  }
+  
+  .btn-excel, .btn-excel:hover {
+    color: #10793f;
+  }
+  
+  .buttons-report {
+    font-size: 18px;
+  }

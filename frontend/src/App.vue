@@ -100,7 +100,7 @@ export default {
   animation: slide-out 0.3s ease;
 }
 
-.pagination {
+/*.pagination {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -109,9 +109,7 @@ export default {
 body {
   padding-bottom: 0px;
 }
+  */
 
-.toast-info {
-  background-color: #17a2b8; /* Azul */
-  color: #fff;
-}
+
 </style>
