@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DevFreela.Core.DTOs;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Models;
 using DevFreela.Core.Repositories;
@@ -31,6 +32,7 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             {
                 projects = projects.Where(p => p.Title.Contains(query) || p.Description.Contains(query));
             }
+
             return await projects.GetPaged(page, PAGE_SIZE);
         }
 
@@ -68,5 +70,28 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         {
             await _dbContext.ProjectComments.AddAsync(projectComment);
         }
+
+        public async Task<List<ProjectsGroupedDTO>> GetProjectsGrouped()
+        {
+            using (var sqlConnection = new SqlConnection(_connectionString))
+            {
+                sqlConnection.Open();
+                var script = "  SELECT Count([Id]) as Quantity, " +
+                             "  Case " +
+                             "      WHEN Status = 0 then 'Created'" +
+                             "      WHEN Status = 1 then 'InProgress'" +
+                             "      WHEN Status = 2 then 'Suspended'" +
+                             "      WHEN Status = 3 then 'Canceled'" +
+                             "      WHEN Status = 4 then 'Finished'" +
+                             "      WHEN Status = 5 then 'PaymentPending'" +
+                             "  END as Status" +
+                             "  FROM Projects" +
+                             "  GROUP BY Status";
+
+                var projectsGrouped = await sqlConnection.QueryAsync<ProjectsGroupedDTO>(script);
+                return projectsGrouped.ToList();
+            };
+        }
+
     }
 }

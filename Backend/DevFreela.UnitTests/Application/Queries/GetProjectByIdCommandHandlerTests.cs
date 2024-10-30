@@ -1,4 +1,4 @@
-﻿using DevFreela.Application.Queries.GetProjectById;
+﻿using DevFreela.Application.Queries.Projects.GetProjectById;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Moq;

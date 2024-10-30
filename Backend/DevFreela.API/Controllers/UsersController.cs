@@ -4,6 +4,7 @@ using DevFreela.Application.Commands.User.DeleteUser;
 using DevFreela.Application.Commands.User.EditUser;
 using DevFreela.Application.Queries.User.GetAllUsers;
 using DevFreela.Application.Queries.User.GetUser;
+using DevFreela.Application.Queries.User.GetUsersGrouped;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,10 +45,15 @@ namespace DevFreela.API.Controllers
             return Ok(users);
         }
 
-        [HttpGet("bar-chart")]
+        [HttpGet("get-users-grouped")]
         public async Task<IActionResult> GetUsersGrouped()
         {
-            return Ok();
+            var query = new GetUsersGroupedQuery();
+            var usersGrouped = await _mediator.Send(query);
+
+            if (usersGrouped is null) return NotFound();
+
+            return Ok(usersGrouped);
         }
 
         // api/users

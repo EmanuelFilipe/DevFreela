@@ -99,17 +99,4 @@ export default {
 .slide-leave-active {
   animation: slide-out 0.3s ease;
 }
-
-/*.pagination {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-body {
-  padding-bottom: 0px;
-}
-  */
-
-
 </style>

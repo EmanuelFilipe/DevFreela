@@ -4,11 +4,12 @@ using DevFreela.Application.Commands.Project.CreateProject;
 using DevFreela.Application.Commands.Project.FinishProject;
 using DevFreela.Application.Commands.Project.UpdateProject;
 using DevFreela.Application.Commands.Project.StartProject;
-using DevFreela.Application.Queries.GetAllProjects;
-using DevFreela.Application.Queries.GetProjectById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DevFreela.Application.Queries.Projects.GetAllProjects;
+using DevFreela.Application.Queries.Projects.GetProjectsGrouped;
+using DevFreela.Application.Queries.Projects.GetProjectById;
 
 namespace DevFreela.API.Controllers;
 
@@ -32,6 +33,18 @@ public class ProjectsController : ControllerBase
         if (projects is null) return NotFound();
         
         return Ok(projects);
+    }
+
+    [HttpGet("projects-grouped")]
+    [Authorize(Roles = "admin")]
+    public async Task<IActionResult> GetProjectsGrouped()
+    {
+        var query = new GetProjectsGroupedQuery();
+        var projectsGrouped = await _mediator.Send(query);
+
+        if (projectsGrouped is null) return NotFound();
+
+        return Ok(projectsGrouped);
     }
 
     [Authorize(Roles = "admin, client")]

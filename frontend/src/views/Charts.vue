@@ -7,7 +7,7 @@
         <br>
         <BarRotatedLabels />
         <br>
-        <DonutChart />
+        <PieChart />
         <br>
         <LineChart />
     </div>
@@ -16,7 +16,7 @@
 <script>
 import BasicBarChart from '@/components/charts/BasicBarChart.vue';
 import BarRotatedLabels from '@/components/charts/BarRotatedLabels.vue';
-import DonutChart from '@/components/charts/DonutChart.vue';
+import PieChart from '@/components/charts/PieChart.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 
     export default {
@@ -24,12 +24,8 @@ import LineChart from '@/components/charts/LineChart.vue';
         components: {
             BasicBarChart,
             BarRotatedLabels,
-            DonutChart,
+            PieChart,
             LineChart
         }
     }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

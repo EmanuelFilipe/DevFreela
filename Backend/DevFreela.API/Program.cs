@@ -19,7 +19,7 @@ builder.Services.Configure<OpeningTimeOption>
 
 // para comunicação com Microsserviço
 builder.Services.AddHttpClient();
-builder.Services.AddHostedService<PaymentApprovedConsumer>();
+//builder.Services.AddHostedService<PaymentApprovedConsumer>();
 
 builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
 //builder.Services.AddScoped<CustomAuthorizeFilter>();

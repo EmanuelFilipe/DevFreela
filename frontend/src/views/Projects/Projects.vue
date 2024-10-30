@@ -6,9 +6,17 @@
           <h1 class="display-3"><strong>Projects</strong></h1>
         </b-col>
       </b-row>
-      <b-row v-if="projects.length">
-        <b-col>
-          <div class="mt-1">
+      <b-row >
+        <b-col v-if="projects.length && user.isAdmin">
+          <ReportButton 
+            @callPDFGenerator="generatePDF"
+            @callExcelGenerator="generateExcel"
+          />
+        </b-col>
+        <b-col v-if="projects.length && user.isAdmin">
+          <ModalPieChart />
+
+          <!-- <div class="mt-1">
             <b-button variant="info" style="color: white" v-b-modal.export-modal
               >Download Report</b-button
             >
@@ -34,7 +42,7 @@
                 </button>
               </div>
             </b-modal>
-          </div>
+          </div> -->
         </b-col>
       </b-row>
       <b-row>
@@ -253,11 +261,16 @@ import jsPDF from "jspdf";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import utilsMixin from "@/mixin/utilsMixin";
+import ReportButton from "@/components/template/ReportButton.vue";
+import ModalPieChart from "@/components/charts/ModalPieChart.vue";
+import { mapState } from 'vuex';
 
 export default {
   name: "Projects",
   components: {
     ButtonCreate,
+    ReportButton,
+    ModalPieChart
   },
   mixins: [ utilsMixin ],
   data() {
@@ -517,6 +530,9 @@ export default {
         this.$toasted.global.defaultError({ msg: error });
       }
     },
+  },
+  computed:{
+    ...mapState(['user'])
   },
   watch: {
     currentPage() {

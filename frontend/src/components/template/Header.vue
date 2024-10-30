@@ -8,7 +8,7 @@
                 <v-btn text to="/" id="title-home">Home</v-btn>
                 <v-btn text to="/users" id="title-users">Users</v-btn>
                 <v-btn text to="/projects">Projects</v-btn>
-                <v-btn text to="/charts">Charts Tests</v-btn>
+                <!-- <v-btn text to="/charts">Charts Tests</v-btn> -->
         </v-toolbar-items>
         <v-spacer></v-spacer>
         <v-toolbar-items>

@@ -7,74 +7,19 @@
         </b-col>
       </b-row>
       <b-row>
-        <!-- <b-col style="padding: 0; margin: 0px;">
-          <div >
-            <button
-              class="btn btn-lg fa fa-file-pdf-o fa-2x"
-              @click.prevent="generatePDF"
-              title="Download PDF"
-            ><span class="buttons-report"><br><strong>PDF</strong></span></button>
-            <button 
-              class="btn btn-lg fa fa-file-excel-o fa-2x" 
-              @click.prevent="generateExcel" 
-              title="Download Excel"
-            ><span class="buttons-report"><br><strong>Excel</strong></span>
-            </button>
-          </div>
-        </b-col> -->
-        <b-col v-if="users.length">
-          <div class="mt-1">
-            <b-button variant="info" style="color: white" v-b-modal.export-modal
-              >Download Report</b-button
-            >
-            <b-modal id="export-modal" title="Choose the format" hide-footer>
-              <div class="text-center">
-                <button
-                  class="btn btn-lg fa fa-file-pdf-o fa-2x btn-pdf"
-                  @click.prevent="generatePDF"
-                  title="Download PDF"
-                >
-                  <span class="buttons-report" style="color: black"
-                    ><br /><strong>PDF</strong></span
-                  >
-                </button>
-                <button
-                  class="btn btn-lg fa fa-file-excel-o fa-2x btn-excel"
-                  @click.prevent="generateExcel"
-                  title="Download Excel"
-                >
-                  <span class="buttons-report" style="color: black"
-                    ><br /><strong>Excel</strong></span
-                  >
-                </button>
-              </div>
-            </b-modal>
-          </div>
+        <b-col v-if="users.length && user.isAdmin">
+          <ReportButton 
+            @callPDFGenerator="generatePDF"
+            @callExcelGenerator="generateExcel"
+          />
+        </b-col>
+        <b-col v-if="users.length && user.isAdmin">
+          <ModalBarChart />
         </b-col>
         <b-col>
           <ButtonCreate url="/user" />
         </b-col>
       </b-row>
-      <!-- <b-row>
-        <div>
-          <b-button variant="primary" v-b-modal.export-modal>Exportar Relatório</b-button>
-          <b-modal id="export-modal" title="Escolha o formato" hide-footer >
-            <div class="text-center">
-              <button
-              class="btn btn-lg fa fa-file-pdf-o fa-2x btn-pdf"
-              @click.prevent="generatePDF"
-              title="Download PDF"
-              ><span class="buttons-report" style="color: black;"><br><strong>PDF</strong></span></button>
-              <button 
-              class="btn btn-lg fa fa-file-excel-o fa-2x btn-excel" 
-              @click.prevent="generateExcel" 
-              title="Download Excel"
-              ><span class="buttons-report" style="color: black;"><br><strong>Excel</strong></span>
-            </button>
-          </div>
-          </b-modal>
-        </div>
-      </b-row> -->
       <hr />
     </b-form>
 
@@ -263,11 +208,16 @@ import "jspdf-autotable";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import utilsMixin from "@/mixin/utilsMixin";
+import ReportButton from "@/components/template/ReportButton.vue";
+import ModalBarChart from "@/components/charts/ModalBarChart.vue";
+import { mapState } from 'vuex';
 
 export default {
   name: "Users",
   components: {
     ButtonCreate,
+    ReportButton,
+    ModalBarChart
   },
   mixins: [ utilsMixin ],
   data() {
@@ -565,6 +515,7 @@ export default {
       const end = this.currentPage * this.perPage;
       return this.users.slice(start, end);
     },
+    ...mapState(['user'])
   },
   mounted() {
     this.loadUsers();

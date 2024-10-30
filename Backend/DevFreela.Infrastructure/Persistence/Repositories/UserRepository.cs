@@ -58,5 +58,19 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         {
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<List<UsersGroupedDTO>> GetUsersGrouped()
+        {
+            using (var sqlConnection = new SqlConnection(_connectionString))
+            {
+                sqlConnection.Open();
+                var script = "SELECT Count([Id]) as Quantity, [Role] " +
+                             "  FROM Users " +
+                             " GROUP BY Role";
+
+                var usersGrouped = await sqlConnection.QueryAsync<UsersGroupedDTO>(script);
+                return usersGrouped.ToList();
+            };
+        }
     }
 }
